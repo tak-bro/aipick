@@ -99,7 +99,7 @@ const createChatCompletion = async (
     return JSON.parse(data) as CreateChatCompletionResponse;
 };
 
-const sanitizeMessage = (message: string) =>
+export const sanitizeMessage = (message: string) =>
     message
         .trim()
         .replace(/[\n\r]/g, '')
@@ -113,6 +113,7 @@ export const generateMessage = async (
     timeout: number,
     maxTokens: number,
     temperature: number,
+    generate: number,
     userMessage: string,
     systemPrompt: string,
     logging: boolean,
@@ -141,6 +142,7 @@ export const generateMessage = async (
                 presence_penalty: 0,
                 max_tokens: maxTokens,
                 stream: false,
+                n: generate,
             },
             timeout,
             proxy
@@ -151,7 +153,10 @@ export const generateMessage = async (
             .map(choice => sanitizeMessage(choice.message!.content as string))
             .join();
         logging && createLogResponse('OPEN AI', userMessage, systemPrompt, fullText);
-        return fullText;
+
+        return completion.choices
+            .filter(choice => choice.message?.content)
+            .map(choice => sanitizeMessage(choice.message!.content as string));
     } catch (error) {
         const errorAsAny = error as any;
         if (errorAsAny.code === 'ENOTFOUND') {

@@ -2,14 +2,12 @@ import fs from 'fs';
 import path from 'path';
 
 export interface PromptOptions {
-    generate: number;
     userMessage: string;
     systemPromptPath?: string;
     systemPrompt?: string;
 }
 
 export const DEFAULT_PROMPT_OPTIONS: PromptOptions = {
-    generate: 1,
     userMessage: '',
     systemPrompt: '',
     systemPromptPath: '',

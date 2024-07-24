@@ -8,6 +8,7 @@ import { AIResponse, AIService, AIServiceParams } from './ai.service.js';
 import { KnownError } from '../../utils/error.js';
 import { createLogResponse } from '../../utils/log.js';
 import { DEFAULT_PROMPT_OPTIONS, PromptOptions, generatePrompt } from '../../utils/prompt.js';
+import { getRandomNumber } from '../../utils/utils.js';
 
 export class CohereService extends AIService {
     private cohere: CohereClient;
@@ -59,10 +60,11 @@ export class CohereService extends AIService {
                 maxTokens,
                 temperature,
                 model: this.params.config.model,
+                seed: getRandomNumber(10, 1000),
             });
 
             logging && createLogResponse('Cohere', userMessage, generatedSystemPrompt, prediction.text);
-            return this.sanitizeResponse(prediction.text, this.params.config.ignoreBody);
+            return this.sanitizeResponse(prediction.text);
         } catch (error) {
             const errorAsAny = error as any;
             if (errorAsAny instanceof CohereTimeoutError) {

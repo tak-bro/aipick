@@ -9,18 +9,18 @@ export default testSuite(({ describe }) => {
     describe('config', async ({ test, describe }) => {
         const { fixture, aipick } = await createFixture();
         const configPath = path.join(fixture.path, '.aipick');
-        const generateConfig = 'generate=3';
+        const temperatureConfig = 'temperature=0.5';
 
         await test('set config file', async () => {
-            await aipick(['config', 'set', generateConfig]);
+            await aipick(['config', 'set', temperatureConfig]);
 
             const configFile = await fs.readFile(configPath, 'utf8');
-            expect(configFile).toMatch(generateConfig);
+            expect(configFile).toMatch(temperatureConfig);
         });
 
         await test('get config file', async () => {
-            const { stdout } = await aipick(['config', 'get', 'generate']);
-            expect(stdout).toBe(generateConfig);
+            const { stdout } = await aipick(['config', 'get', 'temperature']);
+            expect(stdout).toBe(temperatureConfig);
         });
 
         await fixture.rm();

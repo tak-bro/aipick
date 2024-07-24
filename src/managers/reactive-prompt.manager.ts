@@ -21,7 +21,7 @@ export class ReactivePromptManager {
 
     constructor() {}
 
-    initPrompt(showDescription: boolean) {
+    initPrompt(showDescription: boolean = true) {
         inquirer.registerPrompt('reactiveListPrompt', ReactiveListPrompt);
         return inquirer.prompt({
             type: 'reactiveListPrompt',

@@ -56,7 +56,7 @@ export default async (message: string | undefined, systemPrompt: string | undefi
 
         const aiRequestManager = new AIRequestManager(config, message);
         const reactivePromptManager = new ReactivePromptManager();
-        const selectPrompt = reactivePromptManager.initPrompt(!config.ignoreBody);
+        const selectPrompt = reactivePromptManager.initPrompt();
 
         reactivePromptManager.startLoader();
         const subscription = aiRequestManager.createAIRequests$(availableAIs).subscribe(

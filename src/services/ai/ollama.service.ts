@@ -9,7 +9,7 @@ import { DEFAULT_OLLMA_HOST } from '../../utils/config.js';
 import { KnownError } from '../../utils/error.js';
 import { createLogResponse } from '../../utils/log.js';
 import { DEFAULT_PROMPT_OPTIONS, PromptOptions, generatePrompt } from '../../utils/prompt.js';
-import { capitalizeFirstLetter } from '../../utils/utils.js';
+import { capitalizeFirstLetter, getRandomNumber } from '../../utils/utils.js';
 import { HttpRequestBuilder } from '../http/http-request.builder.js';
 
 export interface OllamaServiceError extends AIServiceError {}
@@ -82,7 +82,7 @@ export class OllamaService extends AIService {
             await this.checkIsAvailableOllama();
             const chatResponse = await this.createChatCompletions(generatedSystemPrompt, userMessage);
             logging && createLogResponse(`Ollama_${this.model}`, userMessage, generatedSystemPrompt, chatResponse);
-            return this.sanitizeResponse(chatResponse, this.params.config.ignoreBody);
+            return this.sanitizeResponse(chatResponse);
         } catch (error) {
             const errorAsAny = error as any;
             if (errorAsAny.code === 'ENOTFOUND') {
@@ -125,6 +125,7 @@ export class OllamaService extends AIService {
             stream: false,
             options: {
                 temperature: this.params.config.temperature,
+                seed: getRandomNumber(10, 1000),
             },
         });
         return response.message.content;

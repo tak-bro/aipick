@@ -52,13 +52,25 @@ export abstract class AIService {
         });
     };
 
-    protected sanitizeResponse(generatedText: string, ignoreBody: boolean): AIResponse[] {
-        try {
-            const title = `${getFirstWordsFrom(generatedText)}...`;
-            const value = generatedText;
-            return [{ title, value }];
-        } catch (error) {
-            return [];
+    protected sanitizeResponse(generatedText: string | string[]): AIResponse[] {
+        if (typeof generatedText === 'string') {
+            try {
+                const title = `${getFirstWordsFrom(generatedText)}...`;
+                const value = generatedText;
+                return [{ title, value }];
+            } catch (error) {
+                return [];
+            }
         }
+
+        return generatedText.map(text => {
+            try {
+                const title = `${getFirstWordsFrom(text)}...`;
+                const value = text;
+                return { title, value };
+            } catch (error) {
+                return { title: '', value: '' };
+            }
+        });
     }
 }

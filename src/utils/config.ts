@@ -80,17 +80,6 @@ const generalConfigParsers = {
         parseAssert('logging', /^(?:true|false)$/.test(enable), 'Must be a boolean(true or false)');
         return enable === 'true';
     },
-    ignoreBody(ignore?: string | boolean) {
-        if (!ignore) {
-            return false;
-        }
-        if (typeof ignore === 'boolean') {
-            return ignore;
-        }
-
-        parseAssert('ignoreBody', /^(?:true|false)$/.test(ignore), 'Must be a boolean(true or false)');
-        return ignore === 'true';
-    },
 } as const;
 
 const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>> = {
@@ -106,13 +95,25 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
         },
         path: (path?: string) => path || '/v1/chat/completions',
         proxy: (proxy?: string) => proxy || '',
+        generate(count?: string) {
+            if (!count) {
+                return 1;
+            }
+
+            parseAssert('generate', /^\d+$/.test(count), 'Must be an integer');
+
+            const parsed = Number(count);
+            parseAssert('generate', parsed > 0, 'Must be greater than 0');
+            parseAssert('generate', parsed <= 5, 'Must be less or equal to 5');
+
+            return parsed;
+        },
         systemPrompt: generalConfigParsers.systemPrompt,
         systemPromptPath: generalConfigParsers.systemPromptPath,
         timeout: generalConfigParsers.timeout,
         temperature: generalConfigParsers.temperature,
         'max-tokens': generalConfigParsers['max-tokens'],
         logging: generalConfigParsers.logging,
-        ignoreBody: generalConfigParsers.ignoreBody,
     },
     OLLAMA: {
         model: (models?: string | string[]): string[] => {
@@ -135,7 +136,6 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
         temperature: generalConfigParsers.temperature,
         'max-tokens': generalConfigParsers['max-tokens'],
         logging: generalConfigParsers.logging,
-        ignoreBody: generalConfigParsers.ignoreBody,
     },
     HUGGINGFACE: {
         cookie: (cookie?: string) => cookie || '',
@@ -160,7 +160,6 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
         systemPrompt: generalConfigParsers.systemPrompt,
         systemPromptPath: generalConfigParsers.systemPromptPath,
         logging: generalConfigParsers.logging,
-        ignoreBody: generalConfigParsers.ignoreBody,
     },
     GEMINI: {
         key: (key?: string) => key || '',
@@ -178,7 +177,6 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
         temperature: generalConfigParsers.temperature,
         'max-tokens': generalConfigParsers['max-tokens'],
         logging: generalConfigParsers.logging,
-        ignoreBody: generalConfigParsers.ignoreBody,
     },
     ANTHROPIC: {
         key: (key?: string) => key || '',
@@ -203,7 +201,6 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
         temperature: generalConfigParsers.temperature,
         'max-tokens': generalConfigParsers['max-tokens'],
         logging: generalConfigParsers.logging,
-        ignoreBody: generalConfigParsers.ignoreBody,
     },
     MISTRAL: {
         key: (key?: string) => key || '',
@@ -237,7 +234,6 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
         temperature: generalConfigParsers.temperature,
         'max-tokens': generalConfigParsers['max-tokens'],
         logging: generalConfigParsers.logging,
-        ignoreBody: generalConfigParsers.ignoreBody,
     },
     CODESTRAL: {
         key: (key?: string) => key || '',
@@ -256,7 +252,6 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
         temperature: generalConfigParsers.temperature,
         'max-tokens': generalConfigParsers['max-tokens'],
         logging: generalConfigParsers.logging,
-        ignoreBody: generalConfigParsers.ignoreBody,
     },
     COHERE: {
         key: (key?: string) => key || '',
@@ -274,7 +269,6 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
         temperature: generalConfigParsers.temperature,
         'max-tokens': generalConfigParsers['max-tokens'],
         logging: generalConfigParsers.logging,
-        ignoreBody: generalConfigParsers.ignoreBody,
     },
     GROQ: {
         key: (key?: string) => key || '',
@@ -292,7 +286,6 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
         temperature: generalConfigParsers.temperature,
         'max-tokens': generalConfigParsers['max-tokens'],
         logging: generalConfigParsers.logging,
-        ignoreBody: generalConfigParsers.ignoreBody,
     },
 };
 

@@ -73,7 +73,7 @@ export class AnthropicService extends AIService {
             const result: Anthropic.Message = await this.anthropic.messages.create(params);
             const completion = result.content.map(({ text }) => text).join('');
             logging && createLogResponse('Anthropic', userMessage, generatedSystemPrompt, completion);
-            return this.sanitizeResponse(completion, this.params.config.ignoreBody);
+            return this.sanitizeResponse(completion);
         } catch (error) {
             const errorAsAny = error as any;
             if (errorAsAny.code === 'ENOTFOUND') {

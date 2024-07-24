@@ -63,7 +63,7 @@ export class GeminiService extends AIService {
             const completion = response.text();
 
             logging && createLogResponse('Gemini', userMessage, generatedSystemPrompt, completion);
-            return this.sanitizeResponse(completion, this.params.config.ignoreBody);
+            return this.sanitizeResponse(completion);
         } catch (error) {
             const errorAsAny = error as any;
             if (errorAsAny.code === 'ENOTFOUND') {

@@ -110,7 +110,7 @@ export class HuggingFaceService extends AIService {
             // await this.deleteConversation(conversation.id);
 
             logging && createLogResponse('HuggingFace', userMessage, generatedSystemPrompt, response);
-            return this.sanitizeResponse(response, this.params.config.ignoreBody);
+            return this.sanitizeResponse(response);
         } catch (error) {
             const errorAsAny = error as any;
             if (errorAsAny.code === 'ENOTFOUND') {

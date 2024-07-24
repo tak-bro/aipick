@@ -87,7 +87,7 @@ export class MistralService extends AIService {
             await this.checkAvailableModels();
             const chatResponse = await this.createChatCompletions(generatedSystemPrompt, userMessage);
             logging && createLogResponse('MistralAI', userMessage, generatedSystemPrompt, chatResponse);
-            return this.sanitizeResponse(chatResponse, this.params.config.ignoreBody);
+            return this.sanitizeResponse(chatResponse);
         } catch (error) {
             const errorAsAny = error as any;
             if (errorAsAny.code === 'ENOTFOUND') {

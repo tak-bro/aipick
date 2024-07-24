@@ -7,6 +7,7 @@ import { fromPromise } from 'rxjs/internal/observable/innerFrom';
 
 import { AIResponse, AIService, AIServiceParams } from './ai.service.js';
 import { createLogResponse } from '../../utils/log.js';
+import { sanitizeMessage } from '../../utils/openai.js';
 import { DEFAULT_PROMPT_OPTIONS, PromptOptions, generatePrompt } from '../../utils/prompt.js';
 
 export class GroqService extends AIService {
@@ -71,9 +72,16 @@ export class GroqService extends AIService {
                 }
             );
 
-            const result = chatCompletion.choices[0].message.content || '';
-            logging && createLogResponse('Groq', userMessage, generatedSystemPrompt, result);
-            return this.sanitizeResponse(result, this.params.config.ignoreBody);
+            const fullText = chatCompletion.choices
+                .filter(choice => choice.message?.content)
+                .map(choice => sanitizeMessage(choice.message!.content as string))
+                .join();
+            logging && createLogResponse('Groq', userMessage, generatedSystemPrompt, fullText);
+
+            const result = chatCompletion.choices
+                .filter(choice => choice.message?.content)
+                .map(choice => sanitizeMessage(choice.message!.content as string));
+            return this.sanitizeResponse(result);
         } catch (error) {
             throw error as any;
         }

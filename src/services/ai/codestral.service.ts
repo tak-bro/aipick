@@ -55,7 +55,7 @@ export class CodestralService extends AIService {
             this.checkAvailableModels();
             const chatResponse = await this.createChatCompletions(generatedSystemPrompt, userMessage);
             logging && createLogResponse('Codestral', userMessage, generatedSystemPrompt, chatResponse);
-            return this.sanitizeResponse(chatResponse, this.params.config.ignoreBody);
+            return this.sanitizeResponse(chatResponse);
         } catch (error) {
             const errorAsAny = error as any;
             if (errorAsAny.code === 'ENOTFOUND') {
