@@ -1,0 +1,198 @@
+{
+    "name": "aipick",
+    "version": "0.0.0-semantic-release",
+    "description": "An interactive CLI tool that leverages multiple AI models",
+    "keywords": [
+        "cli",
+        "ai",
+        "command-line",
+        "commandline",
+        "cli",
+        "aipick",
+        "aicommit2",
+        "openai",
+        "huggingface",
+        "hugging face",
+        "anthropic",
+        "claude",
+        "claude3",
+        "gemini",
+        "gemini-pro",
+        "generative-ai",
+        "mistral",
+        "codestral",
+        "ollama",
+        "llama3",
+        "llama3.1",
+        "llm",
+        "chatgpt",
+        "cohere",
+        "groq"
+    ],
+    "license": "MIT",
+    "repository": "tak-bro/aipick",
+    "author": "Hyungtak Jin(@tak-bro)",
+    "type": "module",
+    "files": [
+        "dist"
+    ],
+    "bin": {
+        "aipick": "./dist/cli.mjs",
+        "aip": "./dist/cli.mjs"
+    },
+    "scripts": {
+        "prepare": "simple-git-hooks",
+        "build": "pkgroll --minify",
+        "lint": "eslint --cache .",
+        "type-check": "tsc",
+        "test": "tsx tests",
+        "prepack": "pnpm build && clean-pkg-json",
+        "prettier": "prettier"
+    },
+    "simple-git-hooks": {
+        "pre-commit": "pnpm lint-staged"
+    },
+    "lint-staged": {
+        "*.ts": [
+            "prettier --config ./.prettierrc --write",
+            "eslint --fix"
+        ]
+    },
+    "dependencies": {
+        "@anthropic-ai/sdk": "^0.20.8",
+        "@dqbd/tiktoken": "^1.0.2",
+        "@google/generative-ai": "^0.15.0",
+        "@inquirer/prompts": "^3.0.0",
+        "@pacote/xxhash": "^0.3.2",
+        "axios": "^1.6.8",
+        "chalk": "^5.3.0",
+        "cohere-ai": "^7.11.0",
+        "copy-paste": "^1.5.3",
+        "figlet": "^1.7.0",
+        "formdata-node": "^6.0.3",
+        "groq-sdk": "^0.4.0",
+        "inquirer": "9.2.8",
+        "inquirer-reactive-list-prompt": "^1.0.8",
+        "ollama": "^0.5.6",
+        "ora": "^8.0.1",
+        "readline": "^1.3.0",
+        "rxjs": "^7.8.1",
+        "uuid": "^9.0.1"
+    },
+    "devDependencies": {
+        "@pvtnbr/eslint-config": "^0.33.0",
+        "@semantic-release/changelog": "^6.0.3",
+        "@semantic-release/commit-analyzer": "^12.0.0",
+        "@semantic-release/git": "^10.0.1",
+        "@semantic-release/github": "^10.0.3",
+        "@semantic-release/npm": "^12.0.0",
+        "@semantic-release/release-notes-generator": "^13.0.0",
+        "@types/figlet": "^1.5.8",
+        "@types/ini": "^1.3.31",
+        "@types/inquirer": "^9.0.3",
+        "@types/node": "^18.14.2",
+        "@types/uuid": "^9.0.8",
+        "@typescript-eslint/eslint-plugin": "^6.13.2",
+        "@typescript-eslint/parser": "^6.2.0",
+        "clean-pkg-json": "^1.2.0",
+        "cleye": "^1.3.2",
+        "conventional-changelog-conventionalcommits": "^7.0.2",
+        "conventional-commits-parser": "^5.0.0",
+        "eslint": "^8.52.0",
+        "eslint-config-prettier": "^8.8.0",
+        "eslint-plugin-eslint-comments": "^3.2.0",
+        "eslint-plugin-import": "^2.29.1",
+        "eslint-plugin-jsonc": "^2.10.0",
+        "eslint-plugin-no-use-extend-native": "^0.5.0",
+        "eslint-plugin-promise": "^6.1.1",
+        "eslint-plugin-unicorn": "^49.0.0",
+        "eslint-plugin-unused-imports": "^3.0.0",
+        "execa": "^7.0.0",
+        "fs-fixture": "^1.2.0",
+        "https-proxy-agent": "^5.0.1",
+        "ini": "^3.0.1",
+        "lint-staged": "^13.1.2",
+        "manten": "^0.7.0",
+        "openai": "^3.2.1",
+        "pkgroll": "^1.9.0",
+        "prettier": "^3.0.0",
+        "semantic-release": "^23.0.2",
+        "simple-git-hooks": "^2.8.1",
+        "tsx": "^3.12.3",
+        "typescript": "^4.9.5"
+    },
+    "eslintConfig": {
+        "extends": [
+            "@pvtnbr",
+            "prettier"
+        ],
+        "rules": {
+            "unicorn/no-process-exit": "off"
+        },
+        "overrides": [
+            {
+                "files": "./src/commands/prepare-commit-msg-hook.ts",
+                "rules": {
+                    "unicorn/prevent-abbreviations": "off"
+                }
+            }
+        ]
+    },
+    "release": {
+        "branches": [
+            "main"
+        ],
+        "plugins": [
+            [
+                "@semantic-release/commit-analyzer",
+                {
+                    "preset": "conventionalcommits",
+                    "releaseRules": [
+                        {
+                            "type": "refactor",
+                            "release": "patch"
+                        },
+                        {
+                            "type": "chore",
+                            "release": "patch"
+                        },
+                        {
+                            "type": "feat",
+                            "release": "patch"
+                        },
+                        {
+                            "scope": "major",
+                            "release": "major"
+                        },
+                        {
+                            "scope": "minor",
+                            "release": "minor"
+                        },
+                        {
+                            "scope": "patch",
+                            "release": "patch"
+                        }
+                    ]
+                }
+            ],
+            "@semantic-release/release-notes-generator",
+            [
+                "@semantic-release/changelog",
+                {
+                    "changelogFile": "CHANGELOG.md"
+                }
+            ],
+            "@semantic-release/github",
+            [
+                "@semantic-release/git",
+                {
+                    "assets": [
+                        "CHANGELOG.md"
+                    ],
+                    "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+                }
+            ],
+            "@semantic-release/npm"
+        ]
+    }
+}
