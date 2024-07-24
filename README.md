@@ -21,14 +21,14 @@
 
 ## Introduction
 
-_aipick_ is an interactive CLI tool that leverages multiple AI models.
+_aipick_ is an interactive CLI tool that leverages multiple AI models, designed for quick and efficient handling of simple requests such as variable name recommendations.
 
 ## Key Features
 
 - **Multi-AI Support**: Integrates with OpenAI, Anthropic Claude, Google Gemini, Mistral AI and other AI
-- **Local Model Support**: Use local AI models via Ollama.
 - **Reactive CLI**: Enables simultaneous requests to multiple AIs and selection of the best AI response.
-- **Custom Prompts**: Supports user-defined prompt templates.
+- **Custom System Prompt**: Supports user-defined system prompt templates.
+- **Clipboard Integration**: Automatically copies selected responses to the clipboard for easy use.
 
 ## Supported Providers
 
@@ -108,7 +108,7 @@ This will create a `.aipick` file in your home directory.
 
 3. Run aipick with your message:
 ```shell
-aipick -m "hello, assistant!"
+aipick -m "Why is the sky blue?"
 ```
 
 ## Using Locally
@@ -120,64 +120,51 @@ You can also use your model for free with [Ollama](https://ollama.com/) and it i
 2. Start it with your model
 
 ```shell
-ollama run llama3 # model you want use. ex) codellama, deepseek-coder
+ollama run llama3.1 # model you want use. ex) codestral, gemma2
 ```
 
 3. Set the model and host
 
 ```sh
-aipick config set OLLAMA_MODEL=<your model>
+aipick config set OLLAMA.model=<your model>
 ```
 
-> If you want to use ollama, you must set **OLLAMA_MODEL**.
+> If you want to use ollama, you must set **OLLAMA.model**.
 
 4. Run _aipick_ with your staged in git repository
 ```shell
-git add <files...>
-aipick
+aipick -m "Why is the sky blue?"
 ```
 
 > 👉 **Tip:** Ollama can run LLMs **in parallel** from v0.1.33. Please see [this section](#loading-multiple-ollama-models).
 
 ## How it works
 
-This CLI tool runs `git diff` to grab all your latest code changes, sends them to configured AI, then returns the AI generated commit message.
+- Enter your query through the command-line interface.
+- _aipick_ sends your request to multiple AI models simultaneously.
+- Review responses from different AI providers.
+- Select the most suitable response.
+- The chosen response is automatically copied to your clipboard for immediate use.
 
-> If the diff becomes too large, AI will not function properly. If you encounter an error saying the message is too long or it's not a valid commit message, **try reducing the commit unit**.
-
-## Usage
-
-### CLI mode
-
-You can call `aipick` directly to generate a commit message for your staged changes:
-
-```sh
-git add <files...>
-aipick
-```
-
-`aipick` passes down unknown flags to `git commit`, so you can pass in [`commit` flags](https://git-scm.com/docs/git-commit).
-
-For example, you can stage all changes in tracked files with as you commit:
-
-```sh
-aipick --all # or -a
-```
+> _aipick_ is particularly effective for developers seeking quick suggestions for:
+> - Variable and function names 
+> - Brief explanations of programming concepts
 
 > 👉 **Tip:** Use the `aip` alias if `aipick` is too long for you.
+ 
+## Usage
 
-#### CLI Options
+### CLI Options
 
-##### `--locale` or `-l`
-- Locale to use for the generated commit messages (default: **en**)
+##### `--message` or `-m`
+- Message to ask to AI (**required**)
 
 ```sh
-aipick --locale <s> # or -l <s>
+aipick --message <s> # or -m <s>
 ```
 
 ##### `--generate` or `-g`
-- Number of messages to generate (Warning: generating multiple costs more) (default: **1**)
-- Sometimes the recommended commit message isn't the best so you want it to generate a few to pick from. You can generate multiple commit messages at once by passing in the `--generate <i>` flag, where 'i' is the number of generated messages:
+- Number of responses to generate (Warning: generating multiple costs more) (default: **1**)
 
 ```sh
 aipick --generate <i> # or -g <i>
@@ -185,81 +172,12 @@ aipick --generate <i> # or -g <i>
 
 > Warning: this uses more tokens, meaning it costs more.
 
-##### `--all` or `-a`
-- Automatically stage changes in tracked files for the commit (default: **false**)
+##### `--systemPrompt` or `-s`
+- System prompt to let users fine-tune prompt
 
 ```sh
-aipick --all # or -a
+aipick --systemPrompt <s> # or -s <s>
 ```
-
-##### `--type` or `-t`
-- Automatically stage changes in tracked files for the commit (default: **conventional**)
-- it supports [`conventional`](https://conventionalcommits.org/) and [`gitmoji`](https://gitmoji.dev/)
-
-```sh
-aipick --type conventional # or -t conventional
-aipick --type gitmoji # or -t gitmoji
-```
-
-##### `--confirm` or `-y`
-- Skip confirmation when committing after message generation (default: **false**)
-
-```sh
-aipick --confirm # or -y
-```
-
-##### `--clipboard` or `-c`
-- Copy the selected message to the clipboard (default: **false**)
-- This is a useful option when you don't want to commit through _aipick_.
-- If you give this option, _aipick_ will not commit.
-
-```sh
-aipick --clipboard # or -c
-```
-
-##### `--promptPath` or `-p`
-- Allow users to specify a custom file path for their own prompt template
-- Enable users to define and use their own prompts instead of relying solely on the default prompt
-- Please see [Custom Prompt Template](#custom-prompt-template)
-
-```sh
-aipick --promptPath <s> # or -p <s>
-```
-
-### Git hook
-
-You can also integrate _aipick_ with Git via the [`prepare-commit-msg`](https://git-scm.com/docs/githooks#_prepare_commit_msg) hook. This lets you use Git like you normally would, and edit the commit message before committing.
-
-#### Install
-
-In the Git repository you want to install the hook in:
-
-```sh
-aipick hook install
-```
-
-#### Uninstall
-
-In the Git repository you want to uninstall the hook from:
-
-```sh
-aipick hook uninstall
-```
-
-#### Usage
-
-1. Stage your files and commit:
-
-```sh
-git add <files...>
-git commit # Only generates a message when it's not passed in
-```
-
-> If you ever want to write your own message instead of generating one, you can simply pass one in: `git commit -m "My message"`
-
-2. _aipick_ will generate the commit message for you and pass it back to Git. Git will open it with the [configured editor](https://docs.github.com/en/get-started/getting-started-with-git/associating-text-editors-with-git) for you to review/edit it.
-
-3. Save and close the editor to commit!
 
 ## Configuration
 
@@ -274,13 +192,7 @@ aipick config get <key>
 For example, to retrieve the API key, you can use:
 
 ```sh
-aipick config get OPENAI_KEY
-```
-
-You can also retrieve multiple configuration options at once by separating them with spaces:
-
-```sh
-aipick config get OPENAI_KEY OPENAI_MODEL GEMINI_KEY 
+aipick config get OPENAI.key
 ```
 
 ### Setting a configuration value
@@ -289,18 +201,19 @@ To set a configuration option, use the command:
 
 ```sh
 aipick config set <key>=<value>
+aipick config set <Model.key>=<value>
 ```
 
 For example, to set the API key, you can use:
 
 ```sh
-aipick config set OPENAI_KEY=<your-api-key>
+aipick config set OPENAI.key=<your-api-key>
 ```
 
 You can also set multiple configuration options at once by separating them with spaces, like
 
 ```sh
-aipick config set OPENAI_KEY=<your-api-key> generate=3 locale=en
+aipick config set OPENAI.key=<your-api-key> GEMINI.temperature=3 
 ```
 
 ## Options
