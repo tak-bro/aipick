@@ -95,7 +95,6 @@ export class HuggingFaceService extends AIService {
 
             const userMessage = this.params.userMessage;
             const { generate, systemPrompt, systemPromptPath, logging, temperature } = this.params.config;
-            const maxTokens = this.params.config['max-tokens'];
             const promptOptions: PromptOptions = {
                 ...DEFAULT_PROMPT_OPTIONS,
                 generate,
