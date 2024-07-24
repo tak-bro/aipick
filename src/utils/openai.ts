@@ -110,7 +110,6 @@ export const generateMessage = async (
     path: string,
     apiKey: string,
     model: TiktokenModel,
-    generate: number,
     timeout: number,
     maxTokens: number,
     temperature: number,

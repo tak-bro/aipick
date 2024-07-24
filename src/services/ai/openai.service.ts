@@ -76,7 +76,6 @@ export class OpenAIService extends AIService {
             this.params.config.path,
             this.params.config.key,
             this.params.config.model,
-            generate,
             this.params.config.timeout,
             this.params.config['max-tokens'],
             this.params.config.temperature,

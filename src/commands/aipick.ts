@@ -76,7 +76,7 @@ export default async (generate: number | undefined, message: string | undefined,
 
         const chosenMessage = answer.aipickPrompt?.value;
         if (!chosenMessage) {
-            throw new KnownError('An error occurred! No selected message');
+            throw new KnownError('An error occurred! No selected response');
         }
 
         // eslint-disable-next-line @typescript-eslint/no-var-requires

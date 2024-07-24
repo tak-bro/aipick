@@ -25,7 +25,7 @@ _aipick_ is an interactive CLI tool that leverages multiple AI models.
 
 ## Key Features
 
-- **Multi-AI Support**: Integrates with OpenAI, Anthropic Claude, Google Gemini, Mistral AI, Cohere, Groq, Huggingface
+- **Multi-AI Support**: Integrates with OpenAI, Anthropic Claude, Google Gemini, Mistral AI and other AI
 - **Local Model Support**: Use local AI models via Ollama.
 - **Reactive CLI**: Enables simultaneous requests to multiple AIs and selection of the best AI response.
 - **Custom Prompts**: Supports user-defined prompt templates.
@@ -63,53 +63,52 @@ It is not necessary to set all keys. **But at least one key must be set up.**
 
 - [OpenAI](https://platform.openai.com/account/api-keys)
 ```sh
-aipick config set OPENAI_KEY=<your key>
+aipick config set OPENAI.key=<your key>
 ```
 
 - [Anthropic Claude](https://console.anthropic.com/)
 ```sh
-aipick config set ANTHROPIC_KEY=<your key>
+aipick config set ANTHROPIC.key=<your key>
 ```
 
 - [Gemini](https://aistudio.google.com/app/apikey)
 ```sh
-aipick config set GEMINI_KEY=<your key>
+aipick config set GEMINI.key=<your key>
 ```
 
 - [Mistral AI](https://console.mistral.ai/)
 ```sh
-aipick config set MISTRAL_KEY=<your key>
+aipick config set MISTRAL.key=<your key>
 ```
 
 - [Codestral](https://console.mistral.ai/)
 ```sh
-aipick config set CODESTRAL_KEY=<your key>
+aipick config set CODESTRAL.key=<your key>
 ```
 
 - [Cohere](https://dashboard.cohere.com/)
 ```sh
-aipick config set COHERE_KEY=<your key>
+aipick config set COHERE.key=<your key>
 ```
 
 - [Groq](https://console.groq.com)
 ```sh
-aipick config set GROQ_KEY=<your key>
+aipick config set GROQ.key=<your key>
 ```
 
 - [Huggingface **(Unofficial)**](https://github.com/tak-bro/aipick?tab=readme-ov-file#how-to-get-cookieunofficial-api)
 ```shell
 # Please be cautious of Escape characters(\", \') in browser cookie string 
-aipick config set HUGGINGFACE_COOKIE="<your browser cookie>"
+aipick config set HUGGINGFACE.cookie="<your browser cookie>"
 ```
 
 This will create a `.aipick` file in your home directory.
 
 > You may need to create an account and set up billing.
 
-3. Run aipick with your staged files in git repository:
+3. Run aipick with your message:
 ```shell
-git add <files...>
-aipick
+aipick -m "hello, assistant!"
 ```
 
 ## Using Locally

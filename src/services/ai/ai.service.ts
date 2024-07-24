@@ -2,7 +2,6 @@ import { ReactiveListChoice } from 'inquirer-reactive-list-prompt';
 import { Observable, of } from 'rxjs';
 
 import { ModelConfig, ModelName } from '../../utils/config.js';
-import { DEFAULT_PROMPT_OPTIONS, PromptOptions, generatePrompt } from '../../utils/prompt.js';
 
 export interface AIResponse {
     title: string;
@@ -44,17 +43,6 @@ export abstract class AIService {
 
     abstract generateChoice$(): Observable<ReactiveListChoice>;
 
-    protected buildPrompt(userMessage: string, generate: number, systemPromptPath: string) {
-        const promptOption: PromptOptions = {
-            ...DEFAULT_PROMPT_OPTIONS,
-            userMessage,
-            generate,
-            systemPromptPath,
-        };
-        const defaultPrompt = generatePrompt(promptOption);
-        return `${defaultPrompt}}\n${userMessage}`;
-    }
-
     protected handleError$ = (error: AIServiceError): Observable<ReactiveListChoice> => {
         let simpleMessage = 'An error occurred';
         if (error.message) {
@@ -75,7 +63,7 @@ export abstract class AIService {
                 if (ignoreBody) {
                     return {
                         title: `${data.summary}`,
-                        value: `${data.description}`,
+                        value: `${data.summary}`,
                     };
                 }
                 return {

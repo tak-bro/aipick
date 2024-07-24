@@ -55,7 +55,11 @@ const finalPrompt = (generate: number): string => {
 };
 
 export const generatePrompt = (promptOptions: PromptOptions) => {
-    const { systemPromptPath, generate } = promptOptions;
+    const { systemPrompt, systemPromptPath, generate } = promptOptions;
+    if (systemPrompt) {
+        return `${systemPrompt}\n${finalPrompt(generate)}`;
+    }
+
     if (!systemPromptPath) {
         return `${finalPrompt(generate)}`;
     }
