@@ -4,8 +4,6 @@ import path from 'path';
 
 import { xxh64 } from '@pacote/xxhash';
 
-import { removeTextAfterPhrase } from './utils.js';
-
 export const logPath = path.join(os.homedir(), '.aipick_log');
 
 const now = new Date();
@@ -19,14 +17,7 @@ export const createLogResponse = (aiName: string, userMessage: string, prompt: s
         writeFileSyncRecursive(fullPath, `${title}\n${response}\n\n${originData}`);
         return;
     }
-    const removedPrompt = removeTextAfterPhrase(
-        prompt,
-        'Example response format:\n[\n  {\n    "subject": "string",\n    "body": "string",\n  },\n  ...\n]'
-    );
-    writeFileSyncRecursive(
-        fullPath,
-        `${title}\n${response}\n\n\n[AIPick System Prompt]\n${removedPrompt}\n\n\n[User Prompt]\n${userMessage}`
-    );
+    writeFileSyncRecursive(fullPath, `${title}\n${response}\n\n\n[AIPick Prompt]\n${prompt}\n\n\n[User Prompt]\n${userMessage}`);
 };
 
 export const generateLogFileName = (date: Date, diff: string) => {

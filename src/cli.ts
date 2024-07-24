@@ -12,11 +12,6 @@ cli(
         name: 'aipick',
         version,
         flags: {
-            generate: {
-                type: Number,
-                description: 'Number of responses to generate (Warning: generating multiple costs more) (default: 1)',
-                alias: 'g',
-            },
             message: {
                 type: String,
                 description: 'Message to ask to AI',
@@ -38,7 +33,7 @@ cli(
         ignoreArgv: type => type === 'unknown-flag' || type === 'argument',
     },
     argv => {
-        aipick(argv.flags.generate, argv.flags.message, argv.flags.systemPrompt, rawArgv);
+        aipick(argv.flags.message, argv.flags.systemPrompt, rawArgv);
     },
     rawArgv
 );

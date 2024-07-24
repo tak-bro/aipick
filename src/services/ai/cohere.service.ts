@@ -30,6 +30,7 @@ export class CohereService extends AIService {
             concatMap(messages => from(messages)),
             map(data => ({
                 name: `${this.serviceName} ${data.title}`,
+                short: data.title,
                 value: data.value,
                 description: data.value,
                 isError: false,
@@ -41,10 +42,9 @@ export class CohereService extends AIService {
     private async generateResponses(): Promise<AIResponse[]> {
         try {
             const userMessage = this.params.userMessage;
-            const { generate, systemPrompt, systemPromptPath, logging, temperature } = this.params.config;
+            const { systemPrompt, systemPromptPath, logging, temperature } = this.params.config;
             const promptOptions: PromptOptions = {
                 ...DEFAULT_PROMPT_OPTIONS,
-                generate,
                 userMessage,
                 systemPrompt,
                 systemPromptPath,
@@ -62,7 +62,7 @@ export class CohereService extends AIService {
             });
 
             logging && createLogResponse('Cohere', userMessage, generatedSystemPrompt, prediction.text);
-            return this.sanitizeResponse(prediction.text, generate, this.params.config.ignoreBody);
+            return this.sanitizeResponse(prediction.text, this.params.config.ignoreBody);
         } catch (error) {
             const errorAsAny = error as any;
             if (errorAsAny instanceof CohereTimeoutError) {

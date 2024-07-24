@@ -63,6 +63,7 @@ export class MistralService extends AIService {
             concatMap(messages => from(messages)),
             map(data => ({
                 name: `${this.serviceName} ${data.title}`,
+                short: data.title,
                 value: data.value,
                 description: data.value,
                 isError: false,
@@ -74,10 +75,9 @@ export class MistralService extends AIService {
     private async generateMessages(): Promise<AIResponse[]> {
         try {
             const userMessage = this.params.userMessage;
-            const { generate, systemPrompt, systemPromptPath, logging, temperature } = this.params.config;
+            const { systemPrompt, systemPromptPath, logging, temperature } = this.params.config;
             const promptOptions: PromptOptions = {
                 ...DEFAULT_PROMPT_OPTIONS,
-                generate,
                 userMessage,
                 systemPrompt,
                 systemPromptPath,
@@ -87,7 +87,7 @@ export class MistralService extends AIService {
             await this.checkAvailableModels();
             const chatResponse = await this.createChatCompletions(generatedSystemPrompt, userMessage);
             logging && createLogResponse('MistralAI', userMessage, generatedSystemPrompt, chatResponse);
-            return this.sanitizeResponse(chatResponse, generate, this.params.config.ignoreBody);
+            return this.sanitizeResponse(chatResponse, this.params.config.ignoreBody);
         } catch (error) {
             const errorAsAny = error as any;
             if (errorAsAny.code === 'ENOTFOUND') {

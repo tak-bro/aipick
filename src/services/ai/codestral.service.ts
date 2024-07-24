@@ -33,6 +33,7 @@ export class CodestralService extends AIService {
             concatMap(messages => from(messages)),
             map(data => ({
                 name: `${this.serviceName} ${data.title}`,
+                short: data.title,
                 value: data.value,
                 description: data.value,
                 isError: false,
@@ -43,10 +44,9 @@ export class CodestralService extends AIService {
     private async generateResponses(): Promise<AIResponse[]> {
         try {
             const userMessage = this.params.userMessage;
-            const { generate, systemPrompt, systemPromptPath, logging, temperature } = this.params.config;
+            const { systemPrompt, systemPromptPath, logging, temperature } = this.params.config;
             const promptOptions: PromptOptions = {
                 ...DEFAULT_PROMPT_OPTIONS,
-                generate,
                 userMessage,
                 systemPrompt,
                 systemPromptPath,
@@ -55,7 +55,7 @@ export class CodestralService extends AIService {
             this.checkAvailableModels();
             const chatResponse = await this.createChatCompletions(generatedSystemPrompt, userMessage);
             logging && createLogResponse('Codestral', userMessage, generatedSystemPrompt, chatResponse);
-            return this.sanitizeResponse(chatResponse, generate, this.params.config.ignoreBody);
+            return this.sanitizeResponse(chatResponse, this.params.config.ignoreBody);
         } catch (error) {
             const errorAsAny = error as any;
             if (errorAsAny.code === 'ENOTFOUND') {

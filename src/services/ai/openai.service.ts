@@ -23,6 +23,7 @@ export class OpenAIService extends AIService {
             concatMap(messages => from(messages)),
             map(data => ({
                 name: `${this.serviceName} ${data.title}`,
+                short: data.title,
                 value: data.value,
                 description: data.value,
                 isError: false,
@@ -61,10 +62,9 @@ export class OpenAIService extends AIService {
 
     private async generateMessages(): Promise<AIResponse[]> {
         const userMessage = this.params.userMessage;
-        const { generate, systemPrompt, systemPromptPath, logging, temperature } = this.params.config;
+        const { systemPrompt, systemPromptPath, logging, temperature } = this.params.config;
         const promptOptions: PromptOptions = {
             ...DEFAULT_PROMPT_OPTIONS,
-            generate,
             userMessage,
             systemPrompt,
             systemPromptPath,
@@ -85,6 +85,6 @@ export class OpenAIService extends AIService {
             this.params.config.proxy
         );
 
-        return this.sanitizeResponse(response, generate, this.params.config.ignoreBody);
+        return this.sanitizeResponse(response, this.params.config.ignoreBody);
     }
 }

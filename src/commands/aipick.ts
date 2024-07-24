@@ -11,7 +11,7 @@ import { KnownError, handleCliError } from '../utils/error.js';
 
 const consoleManager = new ConsoleManager();
 
-export default async (generate: number | undefined, message: string | undefined, systemPrompt: string | undefined, rawArgv: string[]) =>
+export default async (message: string | undefined, systemPrompt: string | undefined, rawArgv: string[]) =>
     (async () => {
         consoleManager.printTitle();
 
@@ -21,7 +21,6 @@ export default async (generate: number | undefined, message: string | undefined,
 
         const config = await getConfig(
             {
-                generate: generate as number,
                 systemPrompt: systemPrompt?.toString() as string,
             },
             rawArgv

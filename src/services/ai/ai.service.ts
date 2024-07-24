@@ -2,15 +2,11 @@ import { ReactiveListChoice } from 'inquirer-reactive-list-prompt';
 import { Observable, of } from 'rxjs';
 
 import { ModelConfig, ModelName } from '../../utils/config.js';
+import { getFirstWordsFrom } from '../../utils/utils.js';
 
 export interface AIResponse {
     title: string;
     value: string;
-}
-
-export interface RawAIResponse {
-    summary: string;
-    description?: string;
 }
 
 export interface AIServiceParams {
@@ -56,57 +52,13 @@ export abstract class AIService {
         });
     };
 
-    protected sanitizeResponse(generatedText: string, maxCount: number, ignoreBody: boolean): AIResponse[] {
+    protected sanitizeResponse(generatedText: string, ignoreBody: boolean): AIResponse[] {
         try {
-            const rawResponses: RawAIResponse[] = JSON.parse(generatedText);
-            const filtedResponses = rawResponses.map((data: RawAIResponse) => {
-                if (ignoreBody) {
-                    return {
-                        title: `${data.summary}`,
-                        value: `${data.summary}`,
-                    };
-                }
-                return {
-                    title: `${data.summary}`,
-                    value: `${data.summary}${data.description ? `\n\n${data.description}` : ''}`,
-                };
-            });
-
-            if (filtedResponses.length > maxCount) {
-                return filtedResponses.slice(0, maxCount);
-            }
-            return filtedResponses;
+            const title = `${getFirstWordsFrom(generatedText)}...`;
+            const value = generatedText;
+            return [{ title, value }];
         } catch (error) {
-            const jsonPattern = /\[[\s\S]*?\]/;
-            try {
-                const jsonMatch = generatedText.match(jsonPattern);
-                if (!jsonMatch) {
-                    // No valid JSON array found in the response
-                    return [];
-                }
-                const jsonStr = jsonMatch[0];
-                const rawResponses: RawAIResponse[] = JSON.parse(jsonStr);
-                const filtedResponses = rawResponses.map((data: RawAIResponse) => {
-                    if (ignoreBody) {
-                        return {
-                            title: `${data.summary}`,
-                            value: `${data.summary}`,
-                        };
-                    }
-                    return {
-                        title: `${data.summary}`,
-                        value: `${data.summary}${data.description ? `\n\n${data.description}` : ''}`,
-                    };
-                });
-
-                if (filtedResponses.length > maxCount) {
-                    return filtedResponses.slice(0, maxCount);
-                }
-                return filtedResponses;
-            } catch (e) {
-                // Error parsing JSON
-                return [];
-            }
+            return [];
         }
     }
 }

@@ -10,7 +10,6 @@ import { flattenArray } from './utils.js';
 
 import type { TiktokenModel } from '@dqbd/tiktoken';
 
-
 export const DEFAULT_OLLMA_HOST = 'http://localhost:11434';
 
 const { hasOwnProperty } = Object.prototype;
@@ -37,19 +36,6 @@ const generalConfigParsers = {
             return '';
         }
         return systemPromptPath;
-    },
-    generate(count?: string) {
-        if (!count) {
-            return 1;
-        }
-
-        parseAssert('generate', /^\d+$/.test(count), 'Must be an integer');
-
-        const parsed = Number(count);
-        parseAssert('generate', parsed > 0, 'Must be greater than 0');
-        parseAssert('generate', parsed <= 5, 'Must be less or equal to 5');
-
-        return parsed;
     },
     timeout(timeout?: string) {
         if (!timeout) {
@@ -122,7 +108,6 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
         proxy: (proxy?: string) => proxy || '',
         systemPrompt: generalConfigParsers.systemPrompt,
         systemPromptPath: generalConfigParsers.systemPromptPath,
-        generate: generalConfigParsers.generate,
         timeout: generalConfigParsers.timeout,
         temperature: generalConfigParsers.temperature,
         'max-tokens': generalConfigParsers['max-tokens'],
@@ -146,7 +131,6 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
         },
         systemPrompt: generalConfigParsers.systemPrompt,
         systemPromptPath: generalConfigParsers.systemPromptPath,
-        generate: generalConfigParsers.generate,
         timeout: generalConfigParsers.timeout,
         temperature: generalConfigParsers.temperature,
         'max-tokens': generalConfigParsers['max-tokens'],
@@ -175,7 +159,6 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
         },
         systemPrompt: generalConfigParsers.systemPrompt,
         systemPromptPath: generalConfigParsers.systemPromptPath,
-        generate: generalConfigParsers.generate,
         logging: generalConfigParsers.logging,
         ignoreBody: generalConfigParsers.ignoreBody,
     },
@@ -191,7 +174,6 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
         },
         systemPrompt: generalConfigParsers.systemPrompt,
         systemPromptPath: generalConfigParsers.systemPromptPath,
-        generate: generalConfigParsers.generate,
         timeout: generalConfigParsers.timeout,
         temperature: generalConfigParsers.temperature,
         'max-tokens': generalConfigParsers['max-tokens'],
@@ -217,7 +199,6 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
         },
         systemPrompt: generalConfigParsers.systemPrompt,
         systemPromptPath: generalConfigParsers.systemPromptPath,
-        generate: generalConfigParsers.generate,
         timeout: generalConfigParsers.timeout,
         temperature: generalConfigParsers.temperature,
         'max-tokens': generalConfigParsers['max-tokens'],
@@ -252,7 +233,6 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
         },
         systemPrompt: generalConfigParsers.systemPrompt,
         systemPromptPath: generalConfigParsers.systemPromptPath,
-        generate: generalConfigParsers.generate,
         timeout: generalConfigParsers.timeout,
         temperature: generalConfigParsers.temperature,
         'max-tokens': generalConfigParsers['max-tokens'],
@@ -272,7 +252,6 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
         },
         systemPrompt: generalConfigParsers.systemPrompt,
         systemPromptPath: generalConfigParsers.systemPromptPath,
-        generate: generalConfigParsers.generate,
         timeout: generalConfigParsers.timeout,
         temperature: generalConfigParsers.temperature,
         'max-tokens': generalConfigParsers['max-tokens'],
@@ -291,7 +270,6 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
         },
         systemPrompt: generalConfigParsers.systemPrompt,
         systemPromptPath: generalConfigParsers.systemPromptPath,
-        generate: generalConfigParsers.generate,
         timeout: generalConfigParsers.timeout,
         temperature: generalConfigParsers.temperature,
         'max-tokens': generalConfigParsers['max-tokens'],
@@ -310,7 +288,6 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
         },
         systemPrompt: generalConfigParsers.systemPrompt,
         systemPromptPath: generalConfigParsers.systemPromptPath,
-        generate: generalConfigParsers.generate,
         timeout: generalConfigParsers.timeout,
         temperature: generalConfigParsers.temperature,
         'max-tokens': generalConfigParsers['max-tokens'],

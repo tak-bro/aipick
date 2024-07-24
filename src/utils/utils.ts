@@ -54,3 +54,9 @@ export const flattenArray = (arr: any[]): string[] => {
         return flat.concat(Array.isArray(toFlatten) ? flattenArray(toFlatten) : toFlatten);
     }, []);
 };
+
+export const getFirstWordsFrom = (s: string, wordCount: number = 4): string => {
+    const words = s.split(' ');
+    const firstFiveWords = words.slice(0, wordCount);
+    return firstFiveWords.join(' ');
+};

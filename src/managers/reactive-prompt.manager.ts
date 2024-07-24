@@ -30,9 +30,11 @@ export class ReactivePromptManager {
             emptyMessage: `⚠ ${emptyResponses}`,
             loop: false,
             showDescription,
-            descPageSize: 10,
+            descPageSize: 15,
             choices$: this.choices$,
             loader$: this.loader$,
+            // @ts-ignore ignore
+            pickKey: 'short',
         });
     }
 

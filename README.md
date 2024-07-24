@@ -163,15 +163,6 @@ aipick -m "Why is the sky blue?"
 aipick --message <s> # or -m <s>
 ```
 
-##### `--generate` or `-g`
-- Number of responses to generate (Warning: generating multiple costs more) (default: **1**)
-
-```sh
-aipick --generate <i> # or -g <i>
-```
-
-> Warning: this uses more tokens, meaning it costs more.
-
 ##### `--systemPrompt` or `-s`
 - System prompt to let users fine-tune prompt
 
@@ -242,7 +233,6 @@ aipick config set OPENAI.key=<your-api-key> GEMINI.temperature=3
 | `OLLAMA_HOST`        | `http://localhost:11434`               | The Ollama Host                                                                                                                    |
 | `OLLAMA_TIMEOUT`     | `100_000` ms                           | Request timeout for the Ollama                                                                                                     |
 | `locale`             | `en`                                   | Locale for the generated commit messages                                                                                           |
-| `generate`           | `1`                                    | Number of commit messages to generate                                                                                              |
 | `type`               | `conventional`                         | Type of commit message to generate                                                                                                 |
 | `proxy`              | N/A                                    | Set a HTTP/HTTPS proxy to use for requests(only **OpenAI**)                                                                        |
 | `timeout`            | `10_000` ms                            | Network request timeout                                                                                                            |

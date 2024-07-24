@@ -23,51 +23,25 @@ const parseTemplate = (template: string, options: PromptOptions): string => {
     });
 };
 
-const defaultPrompt = (promptOptions: PromptOptions) => {
+const finalPrompt = (): string => {
     // TODO: add something
-    const { generate } = promptOptions;
     return [].filter(Boolean).join('\n');
 };
 
-const finalPrompt = (generate: number): string => {
-    return [
-        `Generate exactly ${generate} response${generate !== 1 ? 's' : ''} based on the user message.`,
-        `Provide your response as a JSON array containing exactly ${generate} object${generate !== 1 ? 's' : ''}, each with "summary" and "description" keys.`,
-        `The array must always contain ${generate} element${generate !== 1 ? 's' : ''}, no more and no less.`,
-        `Example response format:
-    [
-      ${Array(generate)
-          .fill(null)
-          .map(
-              (_, index) => `{
-        "summary": "Brief summary of response ${index + 1}",
-        "description": "Detailed description of response ${index + 1}"
-      }`
-          )
-          .join(',\n      ')}
-    ]`,
-        `Ensure that the JSON array always contains exactly ${generate} element${generate !== 1 ? 's' : ''}, even if you need to provide similar or slightly varied responses to meet this requirement.`,
-        `The "summary" should be a concise overview, while the "description" should provide more detailed information.`,
-        `The response should be valid JSON that can be parsed without errors.`,
-    ]
-        .filter(Boolean)
-        .join('\n');
-};
-
 export const generatePrompt = (promptOptions: PromptOptions) => {
-    const { systemPrompt, systemPromptPath, generate } = promptOptions;
+    const { systemPrompt, systemPromptPath } = promptOptions;
     if (systemPrompt) {
-        return `${systemPrompt}\n${finalPrompt(generate)}`;
+        return `${systemPrompt}\n${finalPrompt()}`;
     }
 
     if (!systemPromptPath) {
-        return `${finalPrompt(generate)}`;
+        return `${finalPrompt()}`;
     }
 
     try {
         const systemPromptTemplate = fs.readFileSync(path.resolve(systemPromptPath), 'utf-8');
-        return `${parseTemplate(systemPromptTemplate, promptOptions)}\n${finalPrompt(generate)}`;
+        return `${parseTemplate(systemPromptTemplate, promptOptions)}\n${finalPrompt()}`;
     } catch (error) {
-        return `${finalPrompt(generate)}`;
+        return `${finalPrompt()}`;
     }
 };
