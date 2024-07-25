@@ -55,8 +55,9 @@ export const flattenArray = (arr: any[]): string[] => {
     }, []);
 };
 
-export const getFirstWordsFrom = (s: string, wordCount: number = 4): string => {
-    const words = s.split(' ');
+export const getFirstWordsFrom = (input: string, wordCount: number = 5): string => {
+    const sanitizedInput = input.replace(/[\n\r]/g, '');
+    const words = sanitizedInput.split(' ');
     const firstFiveWords = words.slice(0, wordCount);
     return firstFiveWords.join(' ');
 };

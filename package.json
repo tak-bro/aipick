@@ -28,7 +28,6 @@
         "chatgpt",
         "cohere",
         "groq",
-        "aipick",
         "aip"
     ],
     "license": "MIT",

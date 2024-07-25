@@ -9,15 +9,18 @@ export const logPath = path.join(os.homedir(), '.aipick_log');
 const now = new Date();
 
 export const createLogResponse = (aiName: string, userMessage: string, prompt: string, response: string) => {
-    const title = `[${aiName} Response]`;
+    const title = `[${aiName}]`;
     const fileName = generateLogFileName(now, userMessage);
     const fullPath = `${logPath}/${fileName}`;
+    const systemPrompt = prompt ? `- System Prompt\n${prompt}` : '';
+    const userPrompt = `- User Message\n${userMessage}\n`;
+    const aiResponse = `- Response\n${response}\n`;
     if (fs.existsSync(fullPath)) {
         const originData = fs.readFileSync(fullPath, 'utf-8');
-        writeFileSyncRecursive(fullPath, `${title}\n${response}\n\n${originData}`);
+        writeFileSyncRecursive(fullPath, `${title}\n${systemPrompt}${userPrompt}${aiResponse}\n${originData}`);
         return;
     }
-    writeFileSyncRecursive(fullPath, `${title}\n${response}\n\n\n[AIPick Prompt]\n${prompt}\n\n\n[User Prompt]\n${userMessage}`);
+    writeFileSyncRecursive(fullPath, `${title}\n${systemPrompt}${userPrompt}${aiResponse}`);
 };
 
 export const generateLogFileName = (date: Date, diff: string) => {

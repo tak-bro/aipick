@@ -7,7 +7,7 @@ export class ConsoleManager {
     private title = 'aipick';
 
     printTitle() {
-        console.log(figlet.textSync(this.title, { font: 'Small' }));
+        console.log(figlet.textSync(this.title, { font: 'Small' }) + '\n');
     }
 
     printCopied() {

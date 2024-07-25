@@ -1,6 +1,6 @@
 <div align="center">
   <div>
-    <img src="https://github.com/tak-bro/aipick/blob/main/img/demo_body_min.gif?raw=true" alt="AIPick"/>
+    <img src="https://github.com/tak-bro/aipick/blob/main/img/demo_min.gif?raw=true" alt="AIPick"/>
     <h1 align="center">AIPick</h1>
   </div>
   <p>
@@ -21,7 +21,7 @@
 
 ## Introduction
 
-_aipick_ is an interactive CLI tool that leverages multiple AI models, designed for quick and efficient handling of simple requests such as variable name recommendations.
+_aipick_ is an interactive CLI tool that leverages multiple AI models, designed for quick and efficient handling of **simple requests** such as variable name recommendations.
 
 ## Key Features
 
@@ -133,7 +133,7 @@ aipick config set OLLAMA.model=<your model>
 
 > If you want to use ollama, you must set **OLLAMA.model**.
 
-4. Run _aipick_ with your staged in git repository
+4. Run _aipick_ 
 ```shell
 aipick -m "Why is the sky blue?"
 ```
@@ -428,17 +428,14 @@ aipick config set OLLAMA.timeout=<timeout>
 | `systemPromptPath` | Path to system prompt file                                                                                       | -                                      |
 | `logging`          | Enable logging                                                                                                   | true                                   |
 
-```sh
-# example
-aipick config set HUGGINGFACE.cookie="your-cooke"
-aipick config set HUGGINGFACE.systemPrompt="You are a helpful assistant."
-```
-
 ##### HUGGINGFACE.cookie
 
 The [Huggingface Chat](https://huggingface.co/chat/) Cookie. Please check [how to get cookie](https://github.com/tak-bro/aicommit2?tab=readme-ov-file#how-to-get-cookieunofficial-api)
 
+aipick config set HUGGINGFACE.cookie="<your browser cookie>"
+
 ```sh
+# Please be cautious of Escape characters(\", \') in browser cookie string
 aipick config set HUGGINGFACE.cookie="your-cooke"
 aipick config set HUGGINGFACE.systemPrompt="You are a helpful assistant."
 ```
@@ -707,8 +704,6 @@ Be patient, clear, and thorough in your explanations, and adapt to the user's kn
 > - If you want to set the template content, use [`systemPrompt`](#systemprompt) option
 
 ## Loading Multiple Ollama Models
-
-<img src="https://github.com/tak-bro/aipick/blob/main/img/ollama_parallel.gif?raw=true" alt="OLLAMA_PARALLEL" />
 
 You can load and make simultaneous requests to multiple models using Ollama's experimental feature, the `OLLAMA_MAX_LOADED_MODELS` option.
 - `OLLAMA_MAX_LOADED_MODELS`: Load multiple models simultaneously

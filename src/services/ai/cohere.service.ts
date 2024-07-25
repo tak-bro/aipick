@@ -54,7 +54,7 @@ export class CohereService extends AIService {
             const maxTokens = this.params.config.maxTokens;
 
             const prediction = await this.cohere.chat({
-                chatHistory: [{ role: 'SYSTEM', message: generatedSystemPrompt }],
+                chatHistory: generatedSystemPrompt ? [{ role: 'SYSTEM', message: generatedSystemPrompt }] : [],
                 message: userMessage,
                 connectors: [{ id: 'web-search' }],
                 maxTokens,
