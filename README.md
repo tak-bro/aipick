@@ -306,8 +306,6 @@ Default: `true`
 Option that allows users to decide whether to generate a log file capturing the responses.
 The log files will be stored in the `~/.aipick_log` directory(user's home).
 
-![log-path](https://github.com/tak-bro/aipick/blob/main/img/log_path.png?raw=true)
-
 - You can remove all logs below comamnd.
 
 ```sh
@@ -430,7 +428,7 @@ aipick config set OLLAMA.timeout=<timeout>
 
 ##### HUGGINGFACE.cookie
 
-The [Huggingface Chat](https://huggingface.co/chat/) Cookie. Please check [how to get cookie](https://github.com/tak-bro/aicommit2?tab=readme-ov-file#how-to-get-cookieunofficial-api)
+The [Huggingface Chat](https://huggingface.co/chat/) Cookie. Please check [how to get cookie](https://github.com/tak-bro/aipick?tab=readme-ov-file#how-to-get-cookieunofficial-api)
 
 aipick config set HUGGINGFACE.cookie="<your browser cookie>"
 
@@ -754,7 +752,7 @@ aipick
 > - For double quotes ("), use \\"
 > - For single quotes ('), use \\'
 
-![how-to-get-cookie](https://github.com/tak-bro/aipick/assets/7614353/66f2994d-23d9-4c88-a113-f2d3dc5c0669)
+![how-to-get-cookie](https://github.com/tak-bro/aipick/blob/main/img/cookie-huggingface.png?raw=true)
 
 ## Disclaimer
 
