@@ -61,6 +61,8 @@ npm install -g aipick
 
 It is not necessary to set all keys. **But at least one key must be set up.**
 
+> You may need to create an account and set up billing.
+
 - [OpenAI](https://platform.openai.com/account/api-keys)
 ```sh
 aipick config set OPENAI.key=<your key>
@@ -104,12 +106,12 @@ aipick config set HUGGINGFACE.cookie="<your browser cookie>"
 
 This will create a `.aipick` file in your home directory.
 
-> You may need to create an account and set up billing.
-
 3. Run aipick with your message:
 ```shell
 aipick -m "Why is the sky blue?"
 ```
+
+> 👉 **Tip:** Use the `aip` alias if `aipick` is too long for you.
 
 ## Using Locally
 
@@ -141,17 +143,16 @@ aipick -m "Why is the sky blue?"
 ## How it works
 
 - Enter your query through the command-line interface.
-- _aipick_ sends your request to multiple AI models simultaneously.
+- _aipick_ sends your message to multiple AI models simultaneously.
 - Review responses from different AI providers.
 - Select the most suitable response.
-- The chosen response is automatically copied to your clipboard for immediate use.
+- The chosen response is automatically **copied** to your clipboard for immediate use.
 
 > _aipick_ is particularly effective for developers seeking quick suggestions for:
 > - Variable and function names 
+> - Short code snippets
 > - Brief explanations of programming concepts
 
-> 👉 **Tip:** Use the `aip` alias if `aipick` is too long for you.
- 
 ## Usage
 
 ### CLI Options
@@ -170,9 +171,9 @@ aipick --message <s> # or -m <s>
 aipick --systemPrompt <s> # or -s <s>
 ```
 
-## Configuration
+### Configuration
 
-### Reading a configuration value
+#### Reading a configuration value
 
 To retrieve a configuration option, use the command:
 
@@ -186,16 +187,16 @@ For example, to retrieve the API key, you can use:
 aipick config get OPENAI.key
 ```
 
-### Setting a configuration value
+#### Setting a configuration value
 
 To set a configuration option, use the command:
 
 ```sh
 aipick config set <key>=<value>
-aipick config set <Model.key>=<value>
+aipick config set <ModelName.key>=<value>
 ```
 
-For example, to set the API key, you can use:
+For example, to set the OPENAI key, you can use:
 
 ```sh
 aipick config set OPENAI.key=<your-api-key>
@@ -204,92 +205,73 @@ aipick config set OPENAI.key=<your-api-key>
 You can also set multiple configuration options at once by separating them with spaces, like
 
 ```sh
-aipick config set OPENAI.key=<your-api-key> GEMINI.temperature=3 
+aipick config set OPENAI.generate=3 GEMINI.temperature=0.5
 ```
 
-## Options
+#### How to Configure in detail
 
-| Option               | Default                                | Description                                                                                                                        |
-|----------------------|----------------------------------------|------------------------------------------------------------------------------------------------------------------------------------|
-| `OPENAI_KEY`         | N/A                                    | The OpenAI API key                                                                                                                 |
-| `OPENAI_MODEL`       | `gpt-3.5-turbo`                        | The OpenAI Model to use                                                                                                            |
-| `OPENAI_URL`         | `https://api.openai.com`               | The OpenAI URL                                                                                                                     |
-| `OPENAI_PATH`        | `/v1/chat/completions`                 | The OpenAI request pathname                                                                                                        |
-| `ANTHROPIC_KEY`      | N/A                                    | The Anthropic API key                                                                                                              |
-| `ANTHROPIC_MODEL`    | `claude-3-haiku-20240307`              | The Anthropic Model to use                                                                                                         |
-| `GEMINI_KEY`         | N/A                                    | The Gemini API key                                                                                                                 |
-| `GEMINI_MODEL`       | `gemini-1.5-pro-latest`                | The Gemini Model                                                                                                                   |
-| `MISTRAL_KEY`        | N/A                                    | The Mistral API key                                                                                                                |
-| `MISTRAL_MODEL`      | `mistral-tiny`                         | The Mistral Model to use                                                                                                           |
-| `CODESTRAL_KEY`      | N/A                                    | The Codestral API key                                                                                                              |  
-| `CODESTRAL_MODEL`    | `codestral-latest`                     | The Codestral Model to use                                                                                                         |
-| `COHERE_KEY`         | N/A                                    | The Cohere API Key                                                                                                                 |
-| `COHERE_MODEL`       | `command`                              | The identifier of the Cohere model                                                                                                 |
-| `GROQ_KEY`           | N/A                                    | The Groq API Key                                                                                                                   |
-| `GROQ_MODEL`         | `gemma-7b-it`                          | The Groq model name to use                                                                                                         |
-| `HUGGINGFACE_COOKIE` | N/A                                    | The HuggingFace Cookie string                                                                                                      |
-| `HUGGINGFACE_MODEL`  | `mistralai/Mixtral-8x7B-Instruct-v0.1` | The HuggingFace Model to use                                                                                                       |
-| `OLLAMA_MODEL`       | N/A                                    | The Ollama Model. It should be downloaded your local                                                                               |
-| `OLLAMA_HOST`        | `http://localhost:11434`               | The Ollama Host                                                                                                                    |
-| `OLLAMA_TIMEOUT`     | `100_000` ms                           | Request timeout for the Ollama                                                                                                     |
-| `locale`             | `en`                                   | Locale for the generated commit messages                                                                                           |
-| `type`               | `conventional`                         | Type of commit message to generate                                                                                                 |
-| `proxy`              | N/A                                    | Set a HTTP/HTTPS proxy to use for requests(only **OpenAI**)                                                                        |
-| `timeout`            | `10_000` ms                            | Network request timeout                                                                                                            |
-| `max-length`         | `50`                                   | Maximum character length of the generated commit message(Subject)                                                                  |
-| `max-tokens`         | `1024`                                 | The maximum number of tokens that the AI models can generate (for **Open AI, Anthropic, Gemini, Mistral, Codestral**)              |
-| `temperature`        | `0.7`                                  | The temperature (0.0-2.0) is used to control the randomness of the output (for **Open AI, Anthropic, Gemini, Mistral, Codestral**) |
-| `promptPath`         | N/A                                    | Allow users to specify a custom file path for their own prompt template                                                            |
-| `logging`            | `false`                                | Whether to log AI responses for debugging (true or false)                                                                          |
-| `ignoreBody`         | `false`                                | Whether the commit message includes body (true or false)                                                                           |
-
-> **Currently, options are set universally. However, there are plans to develop the ability to set individual options in the future.**
-
-### Available Options by Model
-|                      | locale | generate | type  | proxy |        timeout         | max-length  | max-tokens | temperature | prompt |
-|:--------------------:|:------:|:--------:|:-----:|:-----:|:----------------------:|:-----------:|:----------:|:-----------:|:------:|
-|      **OpenAI**      |   ✓    |    ✓     |   ✓   |   ✓   |           ✓            |      ✓      |     ✓      |      ✓      |   ✓    |
-| **Anthropic Claude** |   ✓    |    ✓     |   ✓   |       |                        |      ✓      |     ✓      |      ✓      |   ✓    |
-|      **Gemini**      |   ✓    |    ✓     |   ✓   |       |                        |      ✓      |     ✓      |      ✓      |   ✓    |
-|    **Mistral AI**    |   ✓    |    ✓     |   ✓   |       |           ✓            |      ✓      |     ✓      |      ✓      |   ✓    |
-|    **Codestral**     |   ✓    |    ✓     |   ✓   |       |           ✓            |      ✓      |     ✓      |      ✓      |   ✓    |
-|      **Cohere**      |   ✓    |    ✓     |   ✓   |       |                        |      ✓      |     ✓      |      ✓      |   ✓    |
-|       **Groq**       |   ✓    |    ✓     |   ✓   |       |           ✓            |      ✓      |            |             |   ✓    |
-|   **Huggingface**    |   ✓    |    ✓     |   ✓   |       |                        |      ✓      |            |             |   ✓    |
-|      **Ollama**      |   ✓    |    ✓     |   ✓   |       | ⚠<br/>(OLLAMA_TIMEOUT) |      ✓      |            |      ✓      |   ✓    |
-
-
-### Common Options
-
-##### locale
-
-Default: `en`
-
-The locale to use for the generated commit messages. Consult the list of codes in: https://wikipedia.org/wiki/List_of_ISO_639_language_codes.
-
-##### generate
-
-Default: `1`
-
-The number of commit messages to generate to pick from.
-
-Note, this will use more tokens as it generates more results.
-
-##### proxy
-
-Set a HTTP/HTTPS proxy to use for requests.
-
-To clear the proxy option, you can use the command (note the empty value after the equals sign):
-
-> **Only supported within the OpenAI**
+1. Command-line arguments: **use the format** `--[ModelName].[SettingKey]=value`
 
 ```sh
-aipick config set proxy=
+aipick -m "Why is the sky blue?" --OPENAI.generate=3
+```
+
+2. Configuration file: **use INI format in the `~/.aipick` file or use `set` command**.
+   Example `~/.aipick`:
+   ```ini
+    # General Settings
+    logging=true
+    temperature=1.0
+
+    [OPENAI]
+    # Model-Specific Settings
+    key="<your-api-key>"
+    temperature=0.8
+    generate=2
+
+    [OLLAMA]
+    temperature=0.7
+    model[]=llama3.1
+    model[]=codestral
+   ```
+
+The priority of settings is: **Command-line Arguments > Model-Specific Settings > General Settings > Default Values**.
+
+## General Settings
+
+The following settings can be applied to most models, but support may vary.
+Please check the documentation for each specific model to confirm which settings are supported.
+
+| Setting            | Description                          | Default  |
+|--------------------|--------------------------------------|----------|
+| `systemPrompt`     | System Prompt text                   | -        |
+| `systemPromptPath` | Path to system prompt file           | -        |
+| `timeout`          | Request timeout (milliseconds)       | 10000    |
+| `temperature`      | Model's creativity (0.0 - 2.0)       | 0.7      |
+| `maxTokens`        | Maximum number of tokens to generate | 1024     |
+| `logging`          | Enable logging                       | true     |
+
+
+##### systemPrompt
+- Allow users to specify a custom system prompt
+
+```sh
+aipick config set systemPrompt="Your communication style is friendly, engaging, and informative."
+```
+
+> `systemPrompt` takes precedence over `SystemPromptPath` and does not apply at the same time.
+
+##### systemPromptPath
+- Allow users to specify a custom file path for their own system prompt template
+- Please see [Custom Prompt Template](#custom-prompt-template)
+
+```sh
+aipick config set systemPromptPath="/path/to/user/prompt.txt"
 ```
 
 ##### timeout
 
-The timeout for network requests to the OpenAI API in milliseconds.
+The timeout for network requests in milliseconds.
 
 Default: `10_000` (10 seconds)
 
@@ -297,44 +279,8 @@ Default: `10_000` (10 seconds)
 aipick config set timeout=20000 # 20s
 ```
 
-##### max-length
-
-The maximum character length of the generated commit message.
-
-Default: `50`
-
-```sh
-aipick config set max-length=100
-```
-
-##### type
-
-Default: `conventional`
-
-Supported: `conventional`, `gitmoji`
-
-The type of commit message to generate. Set this to "conventional" to generate commit messages that follow the Conventional Commits specification:
-
-```sh
-aipick config set type=conventional
-```
-
-You can clear this option by setting it to an empty string:
-
-```sh
-aipick config set type=
-```
-
-##### max-tokens
-The maximum number of tokens that the AI models can generate.
-
-Default: `1024`
-
-```sh
-aipick config set max-tokens=3000
-```
-
 ##### temperature
+
 The temperature (0.0-2.0) is used to control the randomness of the output
 
 Default: `0.7`
@@ -343,92 +289,67 @@ Default: `0.7`
 aipick config set temperature=0
 ```
 
-##### promptPath
-- Allow users to specify a custom file path for their own prompt template
-- Enable users to define and use their own prompts instead of relying solely on the default prompt
-- Please see [Custom Prompt Template](#custom-prompt-template)
+##### maxTokens
+
+The maximum number of tokens that the AI models can generate.
+
+Default: `1024`
 
 ```sh
-aipick config set promptPath="/path/to/user/prompt.txt"
+aipick config set maxTokens=3000
 ```
 
 ##### logging
 
-Default: `false`
+Default: `true`
 
 Option that allows users to decide whether to generate a log file capturing the responses.
 The log files will be stored in the `~/.aipick_log` directory(user's home).
 
 ![log-path](https://github.com/tak-bro/aipick/blob/main/img/log_path.png?raw=true)
 
-```sh
-aipick config set logging="true"
-```
-
 - You can remove all logs below comamnd.
- 
+
 ```sh
 aipick log removeAll 
 ```
 
-##### ignoreBody
+## Model-Specific Settings
 
-Default: `false`
+> Some models mentioned below are subject to change.
 
-This option determines whether the commit message includes body. If you don't want to include body in message, you can set it to `true`.
+### OpenAI
 
-```sh
-aipick config set ignoreBody="true"
-```
-
-![ignore_body_true](https://github.com/tak-bro/aipick/blob/main/img/ignore_body_true.png?raw=true)
-
-
-```sh
-aipick config set ignoreBody="false"
-```
-
-![ignore_body_false](https://github.com/tak-bro/aipick/blob/main/img/ignore_body_false.png?raw=true)
-
-
-### Ollama
-
-##### OLLAMA_MODEL
-
-The Ollama Model. Please see [a list of models available](https://ollama.com/library)
+| Setting            | Description                                                                                                      | Default                |
+|--------------------|------------------------------------------------------------------------------------------------------------------|------------------------|
+| `key`              | API key                                                                                                          | -                      |
+| `model`            | Model to use                                                                                                     | `gpt-3.5-turbo`        |
+| `url`              | API endpoint URL                                                                                                 | https://api.openai.com |
+| `path`             | API path                                                                                                         | /v1/chat/completions   |
+| `proxy`            | Proxy settings                                                                                                   | -                      |
+| `generate`         | Number of responses to generate (1-5)                                                                            | 1                      |
+| `systemPrompt`     | System Prompt text(`systemPrompt` takes precedence over `SystemPromptPath` and does not apply at the same time.) | -                      |
+| `systemPromptPath` | Path to system prompt file                                                                                       | -                      |
+| `timeout`          | Request timeout (milliseconds)                                                                                   | 10000                  |
+| `temperature`      | Model's creativity (0.0 - 2.0)                                                                                   | 0.7                    |
+| `maxTokens`        | Maximum number of tokens to generate                                                                             | 1024                   |
+| `logging`          | Enable logging                                                                                                   | true                   |
 
 ```sh
-aipick config set OLLAMA_MODEL="llama3"
-aipick config set OLLAMA_MODEL="llama3,codellama" # for multiple models
+# example
+aipick config set OPENAI.generate=2
+aipick config set OPENAI.temperature=0.8
 ```
 
-##### OLLAMA_HOST
-
-Default: `http://localhost:11434`
-
-The Ollama host
-
-```sh
-aipick config set OLLAMA_HOST=<host>
-```
-
-##### OLLAMA_TIMEOUT
-
-Default: `100_000` (100 seconds)
-
-Request timeout for the Ollama. Default OLLAMA_TIMEOUT is **100 seconds** because it can take a long time to run locally.
-
-```sh
-aipick config set OLLAMA_TIMEOUT=<timout>
-```
-
-### OPEN AI
-
-##### OPENAI_KEY
+##### OPENAI.key
 
 The OpenAI API key. You can retrieve it from [OpenAI API Keys page](https://platform.openai.com/account/api-keys).
 
-##### OPENAI_MODEL
+```sh
+aipick config set OPENAI.key="your api key"
+```
+
+##### OPENAI.model
 
 Default: `gpt-3.5-turbo`
 
@@ -437,28 +358,169 @@ The Chat Completions (`/v1/chat/completions`) model to use. Consult the list of 
 > Tip: If you have access, try upgrading to [`gpt-4`](https://platform.openai.com/docs/models/gpt-4) for next-level code analysis. It can handle double the input size, but comes at a higher cost. Check out OpenAI's website to learn more.
 
 ```sh
-aipick config set OPENAI_MODEL=gpt-4
+aipick config set OPENAI.model=gpt-4
 ```
 
-##### OPENAI_URL
+##### OPENAI.url
 
 Default: `https://api.openai.com`
 
 The OpenAI URL. Both https and http protocols supported. It allows to run local OpenAI-compatible server.
 
-##### OPENAI_PATH
+##### OPENAI.path
 
 Default: `/v1/chat/completions`
 
 The OpenAI Path.
 
-### Anthropic Claude
+### Ollama
 
-##### ANTHROPIC_KEY
+| Setting            | Description                                                                                                      | Default                |
+|--------------------|------------------------------------------------------------------------------------------------------------------|------------------------|
+| `model`            | Model(s) to use (comma-separated list)                                                                           | -                      |
+| `host`             | Ollama host URL                                                                                                  | http://localhost:11434 |
+| `systemPrompt`     | System Prompt text(`systemPrompt` takes precedence over `SystemPromptPath` and does not apply at the same time.) | -                      |
+| `systemPromptPath` | Path to system prompt file                                                                                       | -                      |
+| `timeout`          | Request timeout (milliseconds)                                                                                   | 10000                  |
+| `temperature`      | Model's creativity (0.0 - 2.0)                                                                                   | 0.7                    |
+| `logging`          | Enable logging                                                                                                   | true                   |
+
+##### OLLAMA.model
+
+The Ollama Model. Please see [a list of models available](https://ollama.com/library)
+
+```sh
+aipick config set OLLAMA_MODEL="llama3"
+aipick config set OLLAMA_MODEL="llama3,codellama" # for multiple models
+
+aipick config add OLLAMA.model="gemma2" # Only Ollama.model can be added.
+```
+
+> OLLAMA.model is only **string array** type to support multiple Ollama. Please see [this section](#loading-multiple-ollama-models).
+
+##### OLLAMA.host
+
+Default: `http://localhost:11434`
+
+The Ollama host
+
+```sh
+aipick config set OLLAMA.host=<host>
+```
+
+##### OLLAMA.timeout
+
+Default: `10_000` (10 seconds)
+
+Request timeout for the Ollama.
+
+```sh
+aipick config set OLLAMA.timeout=<timeout>
+```
+
+### HuggingFace
+
+| Setting            | Description                                                                                                      | Default                                |
+|--------------------|------------------------------------------------------------------------------------------------------------------|----------------------------------------|
+| `cookie`           | Authentication cookie                                                                                            | -                                      |
+| `model`            | Model to use                                                                                                     | `CohereForAI/c4ai-command-r-plus`      |
+| `systemPrompt`     | System Prompt text(`systemPrompt` takes precedence over `SystemPromptPath` and does not apply at the same time.) | -                                      |
+| `systemPromptPath` | Path to system prompt file                                                                                       | -                                      |
+| `logging`          | Enable logging                                                                                                   | true                                   |
+
+```sh
+# example
+aipick config set HUGGINGFACE.cookie="your-cooke"
+aipick config set HUGGINGFACE.systemPrompt="You are a helpful assistant."
+```
+
+##### HUGGINGFACE.cookie
+
+The [Huggingface Chat](https://huggingface.co/chat/) Cookie. Please check [how to get cookie](https://github.com/tak-bro/aicommit2?tab=readme-ov-file#how-to-get-cookieunofficial-api)
+
+```sh
+aipick config set HUGGINGFACE.cookie="your-cooke"
+aipick config set HUGGINGFACE.systemPrompt="You are a helpful assistant."
+```
+
+##### HUGGINGFACE.model
+
+Default: `CohereForAI/c4ai-command-r-plus`
+
+Supported:
+- `CohereForAI/c4ai-command-r-plus`
+- `meta-llama/Meta-Llama-3-70B-Instruct`
+- `HuggingFaceH4/zephyr-orpo-141b-A35b-v0.1`
+- `mistralai/Mixtral-8x7B-Instruct-v0.1`
+- `NousResearch/Nous-Hermes-2-Mixtral-8x7B-DPO`
+- `01-ai/Yi-1.5-34B-Chat`
+- `mistralai/Mistral-7B-Instruct-v0.2`
+- `microsoft/Phi-3-mini-4k-instruct`
+
+```sh
+aipick config set HUGGINGFACE.model="mistralai/Mistral-7B-Instruct-v0.2"
+```
+
+### Gemini
+
+| Setting            | Description                                                                                                      | Default                 |
+|--------------------|------------------------------------------------------------------------------------------------------------------|-------------------------|
+| `key`              | API key                                                                                                          | -                       |
+| `model`            | Model to use                                                                                                     | `gemini-1.5-pro-latest` |
+| `systemPrompt`     | System Prompt text(`systemPrompt` takes precedence over `SystemPromptPath` and does not apply at the same time.) | -                       |
+| `systemPromptPath` | Path to system prompt file                                                                                       | -                       |
+| `temperature`      | Model's creativity (0.0 - 2.0)                                                                                   | 0.7                     |
+| `maxTokens`        | Maximum number of tokens to generate                                                                             | 1024                    |
+| `logging`          | Enable logging                                                                                                   | true                    |
+
+```sh
+# example
+aipick config set GEMINI.temperature=0.5
+aipick config set GEMINI.maxTokens=2048
+```
+
+##### GEMINI.key
+
+The Gemini API key. If you don't have one, create a key in [Google AI Studio](https://aistudio.google.com/app/apikey).
+
+```sh
+aipick config set GEMINI.key="your api key"
+```
+
+##### GEMINI.model
+
+Default: `gemini-1.5-pro-latest`
+
+Supported:
+- `gemini-1.5-pro-latest`
+- `gemini-1.5-flash-latest`
+
+```sh
+aipick config set GEMINI.model="gemini-1.5-flash-latest"
+```
+
+### Anthropic
+
+| Setting            | Description                                                                                                      | Default                   |
+|--------------------|------------------------------------------------------------------------------------------------------------------|---------------------------|
+| `key`              | API key                                                                                                          | -                         |
+| `model`            | Model to use                                                                                                     | `claude-3-haiku-20240307` |
+| `systemPrompt`     | System Prompt text(`systemPrompt` takes precedence over `SystemPromptPath` and does not apply at the same time.) | -                         |
+| `systemPromptPath` | Path to system prompt file                                                                                       | -                         |
+| `temperature`      | Model's creativity (0.0 - 2.0)                                                                                   | 0.7                       |
+| `maxTokens`        | Maximum number of tokens to generate                                                                             | 1024                      |
+| `logging`          | Enable logging                                                                                                   | true                      |
+
+```sh
+# example
+aipick config set ANTHROPIC.temperature=0.5
+```
+
+##### ANTHROPIC.key
 
 The Anthropic API key. To get started with Anthropic Claude, request access to their API at [anthropic.com/earlyaccess](https://www.anthropic.com/earlyaccess).
 
-##### ANTHROPIC_MODEL
+##### ANTHROPIC.model
 
 Default: `claude-3-haiku-20240307`
 
@@ -471,32 +533,27 @@ Supported:
 - `claude-instant-1.2`
 
 ```sh
-aipick config set ANTHROPIC_MODEL=claude-instant-1.2
+aipick config set ANTHROPIC.model=claude-instant-1.2
 ```
 
-### GEMINI
+### Mistral
 
-##### GEMINI_KEY
+| Setting            | Description                                                                                                      | Default        |
+|--------------------|------------------------------------------------------------------------------------------------------------------|----------------|
+| `key`              | API key                                                                                                          | -              |
+| `model`            | Model to use                                                                                                     | `mistral-tiny` |
+| `systemPrompt`     | System Prompt text(`systemPrompt` takes precedence over `SystemPromptPath` and does not apply at the same time.) | -              |
+| `systemPromptPath` | Path to system prompt file                                                                                       | -              |
+| `timeout`          | Request timeout (milliseconds)                                                                                   | 10000          |
+| `temperature`      | Model's creativity (0.0 - 2.0)                                                                                   | 0.7            |
+| `maxTokens`        | Maximum number of tokens to generate                                                                             | 1024           |
+| `logging`          | Enable logging                                                                                                   | true           |
 
-The Gemini API key. If you don't have one, create a key in [Google AI Studio](https://aistudio.google.com/app/apikey).
-
-##### GEMINI_MODEL
-
-Default: `gemini-1.5-pro-latest`
-
-Supported:
-- `gemini-1.5-pro-latest`
-- `gemini-1.5-flash-latest`
-
-> The models mentioned above are subject to change.
-
-### MISTRAL
-
-##### MISTRAL_KEY
+##### MISTRAL.key
 
 The Mistral API key. If you don't have one, please sign up and subscribe in [Mistral Console](https://console.mistral.ai/).
 
-##### MISTRAL_MODEL
+##### MISTRAL.model
 
 Default: `mistral-tiny`
 
@@ -516,15 +573,24 @@ Supported:
 - `mistral-large-2402`
 - `mistral-embed`
 
-> The models mentioned above are subject to change.
+### Codestral
 
-### CODESTRAL
+| Setting            | Description                                                                                                      | Default            |
+|--------------------|------------------------------------------------------------------------------------------------------------------|--------------------|
+| `key`              | API key                                                                                                          | -                  |
+| `model`            | Model to use                                                                                                     | `codestral-latest` |
+| `systemPrompt`     | System Prompt text(`systemPrompt` takes precedence over `SystemPromptPath` and does not apply at the same time.) | -                  |
+| `systemPromptPath` | Path to system prompt file                                                                                       | -                  |
+| `timeout`          | Request timeout (milliseconds)                                                                                   | 10000              |
+| `temperature`      | Model's creativity (0.0 - 2.0)                                                                                   | 0.7                |
+| `maxTokens`        | Maximum number of tokens to generate                                                                             | 1024               |
+| `logging`          | Enable logging                                                                                                   | true               |
 
-##### CODESTRAL_KEY
+##### CODESTRAL.key
 
 The Codestral API key. If you don't have one, please sign up and subscribe in [Mistral Console](https://console.mistral.ai/codestral).
 
-##### CODESTRAL_MODEL
+##### CODESTRAL.model
 
 Default: `codestral-latest`
 
@@ -532,65 +598,74 @@ Supported:
 - `codestral-latest`
 - `codestral-2405`
 
-> The models mentioned above are subject to change.
+```sh
+aipick config set CODESTRAL.model="codestral-2405"
+```
 
-### Cohere
+#### Cohere
 
-##### COHERE_KEY
+| Setting            | Description                                                                                                      | Default           |
+|--------------------|------------------------------------------------------------------------------------------------------------------|-------------------|
+| `key`              | API key                                                                                                          | -                 |
+| `model`            | Model to use                                                                                                     | `command-r-plus`  |
+| `generate`         | Number of responses to generate (1-5)                                                                            | 1                 |
+| `systemPrompt`     | System Prompt text(`systemPrompt` takes precedence over `SystemPromptPath` and does not apply at the same time.) | -                 |
+| `systemPromptPath` | Path to system prompt file                                                                                       | -                 |
+| `temperature`      | Model's creativity (0.0 - 2.0)                                                                                   | 0.7               |
+| `maxTokens`        | Maximum number of tokens to generate                                                                             | 1024              |
+| `logging`          | Enable logging                                                                                                   | true              |
+
+
+##### COHERE.key
 
 The Cohere API key. If you don't have one, please sign up and get the API key in [Cohere Dashboard](https://dashboard.cohere.com/).
 
-##### COHERE_MODEL
+##### COHERE.model
 
 Default: `command`
 
-Supported:
+Supported models:
+- `command-r-plus`
+- `command-r`
 - `command`
 - `command-nightly`
 - `command-light`
 - `command-light-nightly`
 
-> The models mentioned above are subject to change.
+```sh
+aipick config set COHERE.model="command-r"
+```
 
 ### Groq
 
-##### GROQ_KEY
+| Setting            | Description                                                                                                      | Default       |
+|--------------------|------------------------------------------------------------------------------------------------------------------|---------------|
+| `key`              | API key                                                                                                          | -             |
+| `model`            | Model to use                                                                                                     | `gemma-7b-it` |
+| `systemPrompt`     | System Prompt text(`systemPrompt` takes precedence over `SystemPromptPath` and does not apply at the same time.) | -             |
+| `systemPromptPath` | Path to system prompt file                                                                                       | -             |
+| `timeout`          | Request timeout (milliseconds)                                                                                   | 10000         |
+| `temperature`      | Model's creativity (0.0 - 2.0)                                                                                   | 0.7           |
+| `maxTokens`        | Maximum number of tokens to generate                                                                             | 1024          |
+| `logging`          | Enable logging                                                                                                   | true          |
+
+##### GROQ.key
 
 The Groq API key. If you don't have one, please sign up and get the API key in [Groq Console](https://console.groq.com).
 
-##### GROQ_MODEL
+##### GROQ.model
 
 Default: `gemma-7b-it`
 
 Supported:
 - `llama3-8b-8192`
-- 'llama3-70b-8192'
+- `llama3-70b-8192`
 - `mixtral-8x7b-32768`
 - `gemma-7b-it`
 
-> The models mentioned above are subject to change.
-
-### HuggingFace Chat
-
-##### HUGGINGFACE_COOKIE
-
-The [Huggingface Chat](https://huggingface.co/chat/) Cookie. Please check [how to get cookie](https://github.com/tak-bro/aipick?tab=readme-ov-file#how-to-get-cookieunofficial-api)
-
-##### HUGGINGFACE_MODEL
-
-Default: `CohereForAI/c4ai-command-r-plus`
-
-Supported:
-- `CohereForAI/c4ai-command-r-plus`
-- `meta-llama/Meta-Llama-3-70B-Instruct`
-- `HuggingFaceH4/zephyr-orpo-141b-A35b-v0.1`
-- `mistralai/Mixtral-8x7B-Instruct-v0.1`
-- `NousResearch/Nous-Hermes-2-Mixtral-8x7B-DPO`
-- `01-ai/Yi-1.5-34B-Chat`
-- `mistralai/Mistral-7B-Instruct-v0.2`
-- `microsoft/Phi-3-mini-4k-instruct`
-
-> The models mentioned above are subject to change.
+```sh
+aipick config set GROQ.model="llama3-8b-8192"
+```
 
 ## Upgrading
 
@@ -608,68 +683,28 @@ npm update -g aipick
 
 ## Custom Prompt Template
 
-_aipick_ supports custom prompt templates through the `promptPath` option. This feature allows you to define your own prompt structure, giving you more control over the commit message generation process.
+_aipick_ supports custom prompt templates through the `systemPromptPath` option. This feature allows you to define your own system prompt structure, giving you more control over the AI response generation process.
 
-### Using the promptPath Option
+#### Using the promptPath Option
 To use a custom prompt template, specify the path to your template file when running the tool:
-```
-aipick config set promptPath="/path/to/user/prompt.txt"
-```
-
-### Template Format
-
-Your custom template can include placeholders for various commit options.
-Use curly braces `{}` to denote these placeholders for options. The following placeholders are supported:
-
-- [{locale}](#locale): The language for the commit message (string)
-- [{maxLength}](#max-length): The maximum length for the commit message (number)
-- [{type}](#type): The type of the commit (conventional or gitmoji)
-- [{generate}](#generate): The number of commit messages to generate (number)
-
-### Example Template
-
-Here's an example of how your custom template might look:
 
 ```
-Generate a {type} commit message in {locale}.
-The message should not exceed {maxLength} characters.
-Please provide {generate} messages.
-
-Remember to follow these guidelines:
-1. Use the imperative mood
-2. Be concise and clear
-3. Explain the 'why' behind the change
+aipick config set systemPromptPath="/path/to/user/prompt.txt"
 ```
 
-#### Appended Text
+#### Example Template
 
-Please note that the following text will always be appended to the end of your custom prompt:
+Here's an example of how your custom system template might look:
 
 ```
-Provide your response as a JSON array where each element is an object with "subject", "body", and "footer" keys.
-The "subject" should include the type, optional scope, and description . If there's no body or footer, use an empty string for those fields.
-Example response format:
-[
-  {
-    "subject": "string",
-    "body": "string",
-    "footer": "string"
-  },
-  ...
-]
+You are a Software Development Tutor.
+Your mission is to guide users from zero knowledge to understanding the fundamentals of software.
+Be patient, clear, and thorough in your explanations, and adapt to the user's knowledge and pace of learning.
 ```
 
-This ensures that the output is consistently formatted as a JSON array, regardless of the custom template used.
-
-### Notes
-
-If the specified file cannot be read or parsed, _aipick_ will fall back to using the default prompt generation logic.
-Ensure your template includes all necessary instructions for generating appropriate commit messages.
-You can still use all other command-line options in conjunction with `promptPath`.
-
-By using custom templates, you can tailor the commit message generation to your team's specific needs or coding standards.
-
-> NOTE: For the `promptPath` option, set the **template path**, not the template content
+> NOTE
+> - For the `systemPromptPath` option, set the **template path**, not the template content.
+> - If you want to set the template content, use [`systemPrompt`](#systemprompt) option
 
 ## Loading Multiple Ollama Models
 
@@ -694,13 +729,16 @@ OLLAMA_MAX_LOADED_MODELS=3 ollama serve
 
 ##### 2. Configuring _aipick_
 
-Next, set up _aipick_ to specify multiple models. You can assign a list of models, separated by **commas(`,`)**, to the OLLAMA_MODEL environment variable. Here's how you do it:
+Next, set up _aipick_ to specify multiple models. You can assign a list of models, separated by **commas(`,`)**, to the **OLLAMA.model** environment variable. Here's how you do it:
 
 ```shell
-aipick config set OLLAMA_MODEL="mistral,dolphin-llama3"
+aipick config set OLLAMA.model="mistral,llama3.1"
+# or 
+aipick config add OLLAMA.model="mistral"
+aipick config add OLLAMA.model="llama3.1"
 ```
 
-With this command, _aipick_ is instructed to utilize both the "mistral" and "dolphin-llama3" models when making requests to the Ollama server.
+With this command, _aipick_ is instructed to utilize both the "mistral" and "llama3.1" models when making requests to the Ollama server.
 
 ##### 3. Run _aipick_
 
@@ -708,8 +746,7 @@ With this command, _aipick_ is instructed to utilize both the "mistral" and "dol
 aipick
 ```
 
-> Note that this feature is available starting from Ollama version [**0.1.33**](https://github.com/ollama/ollama/releases/tag/v0.1.33) and _aipick_ version [**1.9.5**](https://www.npmjs.com/package/aipick/v/1.9.5).
-
+> Note that this feature is available starting from Ollama version [**0.1.33**](https://github.com/ollama/ollama/releases/tag/v0.1.33).
 
 ## How to get Cookie(**Unofficial API**)
 
@@ -735,6 +772,7 @@ Users are responsible for understanding and abiding by the terms of use, rate li
 It is recommended that users thoroughly review the API documentation and adhere to best practices to ensure a positive and compliant experience.
 
 ## Please Star ⭐️
+
 If this project has been helpful to you, I would greatly appreciate it if you could click the Star⭐️ button on this repository!
 
 ## Maintainers

@@ -95,7 +95,7 @@ export class HuggingFaceService extends AIService {
             await this.intialize();
 
             const userMessage = this.params.userMessage;
-            const { systemPrompt, systemPromptPath, logging, temperature } = this.params.config;
+            const { systemPrompt, systemPromptPath, logging } = this.params.config;
             const promptOptions: PromptOptions = {
                 ...DEFAULT_PROMPT_OPTIONS,
                 userMessage,

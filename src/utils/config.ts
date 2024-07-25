@@ -62,12 +62,12 @@ const generalConfigParsers = {
 
         return parsed;
     },
-    'max-tokens'(maxTokens?: string) {
+    maxTokens(maxTokens?: string) {
         if (!maxTokens) {
             return 1024;
         }
 
-        parseAssert('max-tokens', /^\d+$/.test(maxTokens), 'Must be an integer');
+        parseAssert('maxTokens', /^\d+$/.test(maxTokens), 'Must be an integer');
         return Number(maxTokens);
     },
     logging(enable?: string | boolean) {
@@ -112,7 +112,7 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
         systemPromptPath: generalConfigParsers.systemPromptPath,
         timeout: generalConfigParsers.timeout,
         temperature: generalConfigParsers.temperature,
-        'max-tokens': generalConfigParsers['max-tokens'],
+        maxTokens: generalConfigParsers.maxTokens,
         logging: generalConfigParsers.logging,
     },
     OLLAMA: {
@@ -134,7 +134,7 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
         systemPromptPath: generalConfigParsers.systemPromptPath,
         timeout: generalConfigParsers.timeout,
         temperature: generalConfigParsers.temperature,
-        'max-tokens': generalConfigParsers['max-tokens'],
+        maxTokens: generalConfigParsers.maxTokens,
         logging: generalConfigParsers.logging,
     },
     HUGGINGFACE: {
@@ -175,7 +175,7 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
         systemPromptPath: generalConfigParsers.systemPromptPath,
         timeout: generalConfigParsers.timeout,
         temperature: generalConfigParsers.temperature,
-        'max-tokens': generalConfigParsers['max-tokens'],
+        maxTokens: generalConfigParsers.maxTokens,
         logging: generalConfigParsers.logging,
     },
     ANTHROPIC: {
@@ -199,7 +199,7 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
         systemPromptPath: generalConfigParsers.systemPromptPath,
         timeout: generalConfigParsers.timeout,
         temperature: generalConfigParsers.temperature,
-        'max-tokens': generalConfigParsers['max-tokens'],
+        maxTokens: generalConfigParsers.maxTokens,
         logging: generalConfigParsers.logging,
     },
     MISTRAL: {
@@ -232,7 +232,7 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
         systemPromptPath: generalConfigParsers.systemPromptPath,
         timeout: generalConfigParsers.timeout,
         temperature: generalConfigParsers.temperature,
-        'max-tokens': generalConfigParsers['max-tokens'],
+        maxTokens: generalConfigParsers.maxTokens,
         logging: generalConfigParsers.logging,
     },
     CODESTRAL: {
@@ -250,7 +250,7 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
         systemPromptPath: generalConfigParsers.systemPromptPath,
         timeout: generalConfigParsers.timeout,
         temperature: generalConfigParsers.temperature,
-        'max-tokens': generalConfigParsers['max-tokens'],
+        maxTokens: generalConfigParsers.maxTokens,
         logging: generalConfigParsers.logging,
     },
     COHERE: {
@@ -267,7 +267,7 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
         systemPromptPath: generalConfigParsers.systemPromptPath,
         timeout: generalConfigParsers.timeout,
         temperature: generalConfigParsers.temperature,
-        'max-tokens': generalConfigParsers['max-tokens'],
+        maxTokens: generalConfigParsers.maxTokens,
         logging: generalConfigParsers.logging,
     },
     GROQ: {
@@ -284,7 +284,7 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
         systemPromptPath: generalConfigParsers.systemPromptPath,
         timeout: generalConfigParsers.timeout,
         temperature: generalConfigParsers.temperature,
-        'max-tokens': generalConfigParsers['max-tokens'],
+        maxTokens: generalConfigParsers.maxTokens,
         logging: generalConfigParsers.logging,
     },
 };

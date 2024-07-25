@@ -70,7 +70,7 @@ export class OllamaService extends AIService {
     private async generateMessages(): Promise<AIResponse[]> {
         try {
             const userMessage = this.params.userMessage;
-            const { systemPrompt, systemPromptPath, logging, temperature } = this.params.config;
+            const { systemPrompt, systemPromptPath, logging } = this.params.config;
             const promptOptions: PromptOptions = {
                 ...DEFAULT_PROMPT_OPTIONS,
                 userMessage,
@@ -97,7 +97,7 @@ export class OllamaService extends AIService {
             const response = await new HttpRequestBuilder({
                 method: 'GET',
                 baseURL: `${this.host}`,
-                timeout: this.params.config.OLLAMA_TIMEOUT,
+                timeout: this.params.config.timeout,
             }).execute();
 
             return response.data;

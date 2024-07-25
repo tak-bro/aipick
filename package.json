@@ -27,7 +27,9 @@
         "llm",
         "chatgpt",
         "cohere",
-        "groq"
+        "groq",
+        "aipick",
+        "aip"
     ],
     "license": "MIT",
     "repository": "tak-bro/aipick",

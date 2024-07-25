@@ -42,7 +42,7 @@ export class GroqService extends AIService {
         try {
             const userMessage = this.params.userMessage;
             const { systemPrompt, systemPromptPath, logging, temperature } = this.params.config;
-            const maxTokens = this.params.config['max-tokens'];
+            const maxTokens = this.params.config.maxTokens;
             const promptOptions: PromptOptions = {
                 ...DEFAULT_PROMPT_OPTIONS,
                 userMessage,
