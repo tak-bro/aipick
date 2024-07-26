@@ -37,18 +37,6 @@ export const sortByDisabled = (a: ReactiveListChoice, b: ReactiveListChoice) => 
     return 0;
 };
 
-export const DONE = `done`;
-export const UNDONE = `undone`;
-
-export const removeTextAfterPhrase = (text: string, phrase: string, includePhrase: boolean = false) => {
-    const index = text.indexOf(phrase);
-    if (index !== -1) {
-        const extraIndex = includePhrase ? phrase.length : 0;
-        return text.slice(0, index + extraIndex).trim();
-    }
-    return text;
-};
-
 export const flattenArray = (arr: any[]): string[] => {
     return arr.reduce<string[]>((flat, toFlatten) => {
         return flat.concat(Array.isArray(toFlatten) ? flattenArray(toFlatten) : toFlatten);

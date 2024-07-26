@@ -1,7 +1,7 @@
 {
     "name": "aipick",
     "version": "0.0.0-semantic-release",
-    "description": "An interactive CLI tool that leverages multiple AI models",
+    "description": "An interactive CLI tool leveraging multiple AI models for quick handling of simple requests",
     "keywords": [
         "cli",
         "ai",
