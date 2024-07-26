@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/tak-bro/aipick/compare/v1.0.0...v1.0.1) (2024-07-26)
+
+
+### Bug Fixes
+
+* update error message and refactor code ([5e6bfa1](https://github.com/tak-bro/aipick/commit/5e6bfa14c0ebd724523a2d9bedfa4a134bdde5c6))
+
 # 1.0.0 (2024-07-25)
 
 
