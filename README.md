@@ -135,22 +135,22 @@ aipick -m "Why is the sky blue?" --OPENAI.generate=3
 
 2. Configuration file: **use INI format in the `~/.aipick` file or use `set` command**.
    Example `~/.aipick`:
-   ```ini
-    # General Settings
-    logging=true
-    temperature=1.0
+```ini
+# General Settings
+logging=true
+temperature=1.0
 
-    [OPENAI]
-    # Model-Specific Settings
-    key="<your-api-key>"
-    temperature=0.8
-    generate=2
+[OPENAI]
+# Model-Specific Settings
+key="<your-api-key>"
+temperature=0.8
+generate=2
 
-    [OLLAMA]
-    temperature=0.7
-    model[]=llama3.1
-    model[]=codestral
-   ```
+[OLLAMA]
+temperature=0.7
+model[]=llama3.1
+model[]=codestral
+```
 
 > The priority of settings is: **Command-line Arguments > Model-Specific Settings > General Settings > Default Values**.
 
