@@ -16,7 +16,7 @@ export default async (message: string | undefined, systemPrompt: string | undefi
         consoleManager.printTitle();
 
         if (!message) {
-            throw new KnownError('No messages found. Please type your message through the `-m` option.');
+            throw new KnownError('No message found. Please type your message through the `-m` option.');
         }
 
         const config = await getConfig(

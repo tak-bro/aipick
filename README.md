@@ -4,7 +4,7 @@
     <h1 align="center">AIPick</h1>
   </div>
   <p>
-    An interactive CLI tool that leverages Ollama, ChatGPT, Gemini, Claude, Mistral and other AI.
+    An interactive CLI tool leveraging multiple AI models for quick handling of simple requests
   </p>
 </div>
 
@@ -21,11 +21,11 @@
 
 ## Introduction
 
-_aipick_ is an interactive CLI tool that leverages multiple AI models, designed for quick and efficient handling of **simple requests** such as variable name recommendations.
+_aipick_ is an interactive CLI tool leveraging multiple AI models for quick and efficient handling of simple requests such as variable name recommendations.
 
 ## Key Features
 
-- **Multi-AI Support**: Integrates with OpenAI, Anthropic Claude, Google Gemini, Mistral AI and other AI
+- **Multi-AI Support**: Integrates with OpenAI, Anthropic Claude, Google Gemini, Mistral AI, and more.
 - **Reactive CLI**: Enables simultaneous requests to multiple AIs and selection of the best AI response.
 - **Custom System Prompt**: Supports user-defined system prompt templates.
 - **Clipboard Integration**: Automatically copies selected responses to the clipboard for easy use.
@@ -37,8 +37,7 @@ _aipick_ is an interactive CLI tool that leverages multiple AI models, designed 
 - [OpenAI](https://openai.com/)
 - [Anthropic Claude](https://console.anthropic.com/)
 - [Gemini](https://gemini.google.com/)
-- [Mistral AI](https://mistral.ai/)
-    - [Codestral **(Free till August 1, 2024)**](https://mistral.ai/news/codestral/)
+- [Mistral AI](https://mistral.ai/) (including [Codestral](https://mistral.ai/news/codestral/))
 - [Cohere](https://cohere.com/)
 - [Groq](https://groq.com/)
 - [Huggingface **(Unofficial)**](https://huggingface.co/chat/)
@@ -57,61 +56,21 @@ _aipick_ is an interactive CLI tool that leverages multiple AI models, designed 
 npm install -g aipick
 ```
 
-2. Retrieve and set API keys or Cookie you intend to use:
+2. Set up API keys (**at least one key must be set**):
 
-It is not necessary to set all keys. **But at least one key must be set up.**
-
-> You may need to create an account and set up billing.
-
-- [OpenAI](https://platform.openai.com/account/api-keys)
 ```sh
 aipick config set OPENAI.key=<your key>
+aipick config set OLLAMA.model=<your local model>
+# ... (similar commands for other providers)
 ```
 
-- [Anthropic Claude](https://console.anthropic.com/)
+3. Run aipick:
+
 ```sh
-aipick config set ANTHROPIC.key=<your key>
-```
-
-- [Gemini](https://aistudio.google.com/app/apikey)
-```sh
-aipick config set GEMINI.key=<your key>
-```
-
-- [Mistral AI](https://console.mistral.ai/)
-```sh
-aipick config set MISTRAL.key=<your key>
-```
-
-- [Codestral](https://console.mistral.ai/)
-```sh
-aipick config set CODESTRAL.key=<your key>
-```
-
-- [Cohere](https://dashboard.cohere.com/)
-```sh
-aipick config set COHERE.key=<your key>
-```
-
-- [Groq](https://console.groq.com)
-```sh
-aipick config set GROQ.key=<your key>
-```
-
-- [Huggingface **(Unofficial)**](https://github.com/tak-bro/aipick?tab=readme-ov-file#how-to-get-cookieunofficial-api)
-```shell
-# Please be cautious of Escape characters(\", \') in browser cookie string 
-aipick config set HUGGINGFACE.cookie="<your browser cookie>"
-```
-
-This will create a `.aipick` file in your home directory.
-
-3. Run aipick with your message:
-```shell
 aipick -m "Why is the sky blue?"
 ```
 
-> 👉 **Tip:** Use the `aip` alias if `aipick` is too long for you.
+> 👉 **Tip:** Use the `aip` alias if `aipick` is too long for you.
 
 ## Using Locally
 
@@ -140,71 +99,29 @@ aipick -m "Why is the sky blue?"
 
 > 👉 **Tip:** Ollama can run LLMs **in parallel** from v0.1.33. Please see [this section](#loading-multiple-ollama-models).
 
-## How it works
-
-- Enter your query through the command-line interface.
-- _aipick_ sends your message to multiple AI models simultaneously.
-- Review responses from different AI providers.
-- Select the most suitable response.
-- The chosen response is automatically **copied** to your clipboard for immediate use.
-
-> _aipick_ is particularly effective for developers seeking quick suggestions for:
-> - Variable and function names 
-> - Short code snippets
-> - Brief explanations of programming concepts
 
 ## Usage
 
 ### CLI Options
 
-##### `--message` or `-m`
-- Message to ask to AI (**required**)
+- `--message` or `-m`: Message to ask AI (required)
+- `--systemPrompt` or `-s`: System prompt for fine-tuning
 
+Example:
 ```sh
-aipick --message <s> # or -m <s>
-```
-
-##### `--systemPrompt` or `-s`
-- System prompt to let users fine-tune prompt
-
-```sh
-aipick --systemPrompt <s> # or -s <s>
+aipick --message "Explain quantum computing" --systemPrompt "You are a physics expert"
 ```
 
 ### Configuration
 
-#### Reading a configuration value
+#### Reading and Setting Configuration
 
-To retrieve a configuration option, use the command:
+- Read: `aipick config get <key>`
+- Set: `aipick config set <key>=<value>`
 
-```sh
-aipick config get <key>
-```
-
-For example, to retrieve the API key, you can use:
-
+Example:
 ```sh
 aipick config get OPENAI.key
-```
-
-#### Setting a configuration value
-
-To set a configuration option, use the command:
-
-```sh
-aipick config set <key>=<value>
-aipick config set <ModelName.key>=<value>
-```
-
-For example, to set the OPENAI key, you can use:
-
-```sh
-aipick config set OPENAI.key=<your-api-key>
-```
-
-You can also set multiple configuration options at once by separating them with spaces, like
-
-```sh
 aipick config set OPENAI.generate=3 GEMINI.temperature=0.5
 ```
 
@@ -218,24 +135,24 @@ aipick -m "Why is the sky blue?" --OPENAI.generate=3
 
 2. Configuration file: **use INI format in the `~/.aipick` file or use `set` command**.
    Example `~/.aipick`:
-   ```ini
-    # General Settings
-    logging=true
-    temperature=1.0
+```ini
+# General Settings
+logging=true
+temperature=1.0
 
-    [OPENAI]
-    # Model-Specific Settings
-    key="<your-api-key>"
-    temperature=0.8
-    generate=2
+[OPENAI]
+# Model-Specific Settings
+key="<your-api-key>"
+temperature=0.8
+generate=2
 
-    [OLLAMA]
-    temperature=0.7
-    model[]=llama3.1
-    model[]=codestral
-   ```
+[OLLAMA]
+temperature=0.7
+model[]=llama3.1
+model[]=codestral
+```
 
-The priority of settings is: **Command-line Arguments > Model-Specific Settings > General Settings > Default Values**.
+> The priority of settings is: **Command-line Arguments > Model-Specific Settings > General Settings > Default Values**.
 
 ## General Settings
 
@@ -333,12 +250,6 @@ aipick log removeAll
 | `maxTokens`        | Maximum number of tokens to generate                                                                             | 1024                   |
 | `logging`          | Enable logging                                                                                                   | true                   |
 
-```sh
-# example
-aipick config set OPENAI.generate=2
-aipick config set OPENAI.temperature=0.8
-```
-
 ##### OPENAI.key
 
 The OpenAI API key. You can retrieve it from [OpenAI API Keys page](https://platform.openai.com/account/api-keys).
@@ -435,7 +346,6 @@ aipick config set HUGGINGFACE.cookie="<your browser cookie>"
 ```sh
 # Please be cautious of Escape characters(\", \') in browser cookie string
 aipick config set HUGGINGFACE.cookie="your-cooke"
-aipick config set HUGGINGFACE.systemPrompt="You are a helpful assistant."
 ```
 
 ##### HUGGINGFACE.model
@@ -468,12 +378,6 @@ aipick config set HUGGINGFACE.model="mistralai/Mistral-7B-Instruct-v0.2"
 | `maxTokens`        | Maximum number of tokens to generate                                                                             | 1024                    |
 | `logging`          | Enable logging                                                                                                   | true                    |
 
-```sh
-# example
-aipick config set GEMINI.temperature=0.5
-aipick config set GEMINI.maxTokens=2048
-```
-
 ##### GEMINI.key
 
 The Gemini API key. If you don't have one, create a key in [Google AI Studio](https://aistudio.google.com/app/apikey).
@@ -505,11 +409,6 @@ aipick config set GEMINI.model="gemini-1.5-flash-latest"
 | `temperature`      | Model's creativity (0.0 - 2.0)                                                                                   | 0.7                       |
 | `maxTokens`        | Maximum number of tokens to generate                                                                             | 1024                      |
 | `logging`          | Enable logging                                                                                                   | true                      |
-
-```sh
-# example
-aipick config set ANTHROPIC.temperature=0.5
-```
 
 ##### ANTHROPIC.key
 
@@ -754,24 +653,16 @@ aipick
 
 ![how-to-get-cookie](https://github.com/tak-bro/aipick/blob/main/img/cookie-huggingface.png?raw=true)
 
-## Disclaimer
+## Disclaimer and Risks
 
-This project utilizes certain functionalities or data from external APIs, but it is important to note that it is not officially affiliated with or endorsed by the providers of those APIs. The use of external APIs is at the sole discretion and risk of the user.
-
-## Risk Acknowledgment
-
-Users are responsible for understanding and abiding by the terms of use, rate limits, and policies set forth by the respective API providers. The project maintainers cannot be held responsible for any misuse, downtime, or issues arising from the use of the external APIs.
-
-It is recommended that users thoroughly review the API documentation and adhere to best practices to ensure a positive and compliant experience.
-
-## Please Star ⭐️
-
-If this project has been helpful to you, I would greatly appreciate it if you could click the Star⭐️ button on this repository!
-
-## Maintainers
-
-- [@tak-bro](https://env-tak.github.io/)
+This project uses functionalities from external APIs but is not officially affiliated with or endorsed by their providers. Users are responsible for complying with API terms, rate limits, and policies.
 
 ## Contributing
 
-If you want to help fix a bug or implement a feature in [Issues](https://github.com/tak-bro/aipick/issues), checkout the [Contribution Guide](CONTRIBUTING.md) to learn how to setup and test the project.
+For bug fixes or feature implementations, please check the [Contribution Guide](CONTRIBUTING.md).
+
+---
+
+If this project has been helpful, please consider giving it a Star ⭐️!
+
+Maintainer: [@tak-bro](https://env-tak.github.io/)
