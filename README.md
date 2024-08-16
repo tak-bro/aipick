@@ -299,8 +299,8 @@ The OpenAI Path.
 The Ollama Model. Please see [a list of models available](https://ollama.com/library)
 
 ```sh
-aipick config set OLLAMA_MODEL="llama3"
-aipick config set OLLAMA_MODEL="llama3,codellama" # for multiple models
+aipick config set OLLAMA.model="llama3"
+aipick config set OLLAMA.model="llama3,codellama" # for multiple models
 
 aipick config add OLLAMA.model="gemma2" # Only Ollama.model can be added.
 ```
@@ -340,8 +340,6 @@ aipick config set OLLAMA.timeout=<timeout>
 ##### HUGGINGFACE.cookie
 
 The [Huggingface Chat](https://huggingface.co/chat/) Cookie. Please check [how to get cookie](https://github.com/tak-bro/aipick?tab=readme-ov-file#how-to-get-cookieunofficial-api)
-
-aipick config set HUGGINGFACE.cookie="<your browser cookie>"
 
 ```sh
 # Please be cautious of Escape characters(\", \') in browser cookie string

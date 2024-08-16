@@ -44,7 +44,7 @@ export class CodestralService extends AIService {
     private async generateResponses(): Promise<AIResponse[]> {
         try {
             const userMessage = this.params.userMessage;
-            const { systemPrompt, systemPromptPath, logging, temperature } = this.params.config;
+            const { systemPrompt, systemPromptPath, logging } = this.params.config;
             const promptOptions: PromptOptions = {
                 ...DEFAULT_PROMPT_OPTIONS,
                 userMessage,
