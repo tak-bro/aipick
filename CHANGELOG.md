@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/tak-bro/aipick/compare/v1.0.1...v1.0.2) (2024-08-16)
+
+
+### Features
+
+* add Perplexity service ([9a88637](https://github.com/tak-bro/aipick/commit/9a886377436bef98028630b274814583e59a52d8))
+
 ## [1.0.1](https://github.com/tak-bro/aipick/compare/v1.0.0...v1.0.1) (2024-07-26)
 
 
