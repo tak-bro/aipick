@@ -21,7 +21,18 @@ const parseAssert = (name: string, condition: any, message: string) => {
     }
 };
 
-export const modelNames = ['OPENAI', 'OLLAMA', 'HUGGINGFACE', 'GEMINI', 'ANTHROPIC', 'MISTRAL', 'CODESTRAL', 'COHERE', 'GROQ'] as const;
+export const modelNames = [
+    'OPENAI',
+    'OLLAMA',
+    'HUGGINGFACE',
+    'GEMINI',
+    'ANTHROPIC',
+    'MISTRAL',
+    'CODESTRAL',
+    'COHERE',
+    'GROQ',
+    'PERPLEXITY',
+] as const;
 export type ModelName = (typeof modelNames)[number];
 
 const generalConfigParsers = {
@@ -130,9 +141,19 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
             parseAssert('OLLAMA.host', /^https?:\/\//.test(host), 'Must be a valid URL');
             return host;
         },
+        timeout: (timeout?: string) => {
+            if (!timeout) {
+                return 100_000;
+            }
+
+            parseAssert('OLLAMA.timeout', /^\d+$/.test(timeout), 'Must be an integer');
+
+            const parsed = Number(timeout);
+            parseAssert('OLLAMA.timeout', parsed >= 500, 'Must be greater than 500ms');
+            return parsed;
+        },
         systemPrompt: generalConfigParsers.systemPrompt,
         systemPromptPath: generalConfigParsers.systemPromptPath,
-        timeout: generalConfigParsers.timeout,
         temperature: generalConfigParsers.temperature,
         maxTokens: generalConfigParsers.maxTokens,
         logging: generalConfigParsers.logging,
@@ -165,9 +186,9 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
         key: (key?: string) => key || '',
         model: (model?: string) => {
             if (!model || model.length === 0) {
-                return 'gemini-1.5-pro-latest';
+                return 'gemini-1.5-pro';
             }
-            const supportModels = ['gemini-1.5-flash-latest', 'gemini-1.5-pro-latest'];
+            const supportModels = ['gemini-1.5-flash', 'gemini-1.5-pro', 'gemini-1.5-pro-exp-0801'];
             parseAssert('GEMINI.model', supportModels.includes(model), 'Invalid model type of Gemini');
             return model;
         },
@@ -184,12 +205,10 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
                 return 'claude-3-haiku-20240307';
             }
             const supportModels = [
-                'claude-2.1',
-                'claude-2.0',
-                'claude-instant-1.2',
-                'claude-3-haiku-20240307',
-                'claude-3-sonnet-20240229',
-                'claude-3-opus-20240229',
+                `claude-3-haiku-20240307`,
+                `claude-3-sonnet-20240229`,
+                `claude-3-opus-20240229`,
+                `claude-3-5-sonnet-20240620`,
             ];
             parseAssert('ANTHROPIC.model', supportModels.includes(model), 'Invalid model type of Anthropic');
             return model;
@@ -255,9 +274,9 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
         key: (key?: string) => key || '',
         model: (model?: string) => {
             if (!model || model.length === 0) {
-                return 'command-r-plus';
+                return 'command';
             }
-            const supportModels = ['command-r-plus', 'command-r', 'command', `command-nightly`, `command-light`, `command-light-nightly`];
+            const supportModels = ['command', `command-nightly`, `command-light`, `command-light-nightly`];
             parseAssert('COHERE.model', supportModels.includes(model), 'Invalid model type of Cohere');
             return model;
         },
@@ -272,10 +291,46 @@ const modelConfigParsers: Record<ModelName, Record<string, (value: any) => any>>
         key: (key?: string) => key || '',
         model: (model?: string) => {
             if (!model || model.length === 0) {
-                return 'gemma-7b-it';
+                return 'gemma2-9b-it';
             }
-            const supportModels = [`llama3-8b-8192`, 'llama3-70b-8192', `mixtral-8x7b-32768`, `gemma-7b-it`];
+            const supportModels = [
+                `gemma2-9b-it`,
+                `gemma-7b-it`,
+                `llama-3.1-70b-versatile`,
+                `llama-3.1-8b-instant`,
+                `llama3-70b-8192`,
+                `llama3-8b-8192`,
+                `llama3-groq-70b-8192-tool-use-preview`,
+                `llama3-groq-8b-8192-tool-use-preview`,
+            ];
             parseAssert('GROQ.model', supportModels.includes(model), 'Invalid model type of Groq');
+            return model;
+        },
+        systemPrompt: generalConfigParsers.systemPrompt,
+        systemPromptPath: generalConfigParsers.systemPromptPath,
+        timeout: generalConfigParsers.timeout,
+        temperature: generalConfigParsers.temperature,
+        maxTokens: generalConfigParsers.maxTokens,
+        logging: generalConfigParsers.logging,
+    },
+    PERPLEXITY: {
+        key: (key?: string) => key || '',
+        model: (model?: string) => {
+            if (!model || model.length === 0) {
+                return 'llama-3.1-sonar-small-128k-chat';
+            }
+
+            // https://docs.perplexity.ai/docs/model-cards
+            const supportModels = [
+                'llama-3.1-sonar-small-128k-online',
+                'llama-3.1-sonar-small-128k-chat',
+                'llama-3.1-sonar-large-128k-online',
+                'llama-3.1-sonar-large-128k-chat',
+                'llama-3.1-8b-instruct',
+                'llama-3.1-70b-instruct',
+            ];
+
+            parseAssert('PERPLEXITY.model', supportModels.includes(model), 'Invalid model type of Perplexity');
             return model;
         },
         systemPrompt: generalConfigParsers.systemPrompt,

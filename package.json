@@ -9,6 +9,7 @@
         "commandline",
         "cli",
         "aipick",
+        "aicommits",
         "aicommit2",
         "openai",
         "huggingface",
@@ -28,7 +29,8 @@
         "chatgpt",
         "cohere",
         "groq",
-        "aip"
+        "aip",
+        "perplexity"
     ],
     "license": "MIT",
     "repository": "tak-bro/aipick",
