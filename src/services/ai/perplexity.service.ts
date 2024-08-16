@@ -8,20 +8,7 @@ import { AIResponse, AIService, AIServiceError, AIServiceParams } from './ai.ser
 import { KnownError } from '../../utils/error.js';
 import { createLogResponse } from '../../utils/log.js';
 import { DEFAULT_PROMPT_OPTIONS, PromptOptions, generatePrompt } from '../../utils/prompt.js';
-import { getRandomNumber } from '../../utils/utils.js';
 import { HttpRequestBuilder } from '../http/http-request.builder.js';
-
-export interface MistralServiceError extends AIServiceError {}
-
-export interface ListAvailableModelsResponse {
-    object: string;
-    data: {
-        id: string;
-        object: string;
-        created: number;
-        owned_by: string;
-    }[];
-}
 
 export interface CreateChatCompletionsResponse {
     id: string;
@@ -43,18 +30,18 @@ export interface CreateChatCompletionsResponse {
     };
 }
 
-export class MistralService extends AIService {
-    private host = `https://api.mistral.ai`;
+export class PerplexityService extends AIService {
+    private host = 'https://api.perplexity.ai';
     private apiKey = '';
 
     constructor(private readonly params: AIServiceParams) {
         super(params);
         this.colors = {
-            primary: '#ff7000',
-            secondary: '#fff',
+            primary: '#20808D',
+            secondary: '#FFF',
         };
-        this.serviceName = chalk.bgHex(this.colors.primary).hex(this.colors.secondary).bold('[MistralAI]');
-        this.errorPrefix = chalk.red.bold(`[MistralAI]`);
+        this.serviceName = chalk.bgHex(this.colors.primary).hex(this.colors.secondary).bold(`[Perplexity]`);
+        this.errorPrefix = chalk.red.bold(`[Perplexity]`);
         this.apiKey = this.params.config.key;
     }
 
@@ -72,10 +59,39 @@ export class MistralService extends AIService {
         );
     }
 
+    handleError$ = (error: AIServiceError) => {
+        let simpleMessage = 'An error occurred';
+        if (error.message) {
+            simpleMessage = error.message.split('\n')[0];
+            const errorJson = this.extractJSONFromError(error.message);
+            simpleMessage += `: ${errorJson.error.message}`;
+        }
+        return of({
+            name: `${this.errorPrefix} ${simpleMessage}`,
+            value: simpleMessage,
+            isError: true,
+            disabled: true,
+        });
+    };
+
+    private extractJSONFromError(error: string) {
+        const regex = /[{[]{1}([,:{}[\]0-9.\-+Eaeflnr-u \n\r\t]|".*?")+[}\]]{1}/gis;
+        const matches = error.match(regex);
+        if (matches) {
+            return Object.assign({}, ...matches.map((m: any) => JSON.parse(m)));
+        }
+        return {
+            error: {
+                message: 'Unknown error',
+            },
+        };
+    }
+
     private async generateResponses(): Promise<AIResponse[]> {
         try {
             const userMessage = this.params.userMessage;
             const { systemPrompt, systemPromptPath, logging, temperature } = this.params.config;
+            const maxTokens = this.params.config.maxTokens;
             const promptOptions: PromptOptions = {
                 ...DEFAULT_PROMPT_OPTIONS,
                 userMessage,
@@ -84,9 +100,8 @@ export class MistralService extends AIService {
             };
             const generatedSystemPrompt = generatePrompt(promptOptions);
 
-            await this.checkAvailableModels();
             const chatResponse = await this.createChatCompletions(generatedSystemPrompt, userMessage);
-            logging && createLogResponse('MistralAI', userMessage, generatedSystemPrompt, chatResponse);
+            logging && createLogResponse('Perplexity', userMessage, generatedSystemPrompt, chatResponse);
             return this.sanitizeResponse(chatResponse);
         } catch (error) {
             const errorAsAny = error as any;
@@ -97,43 +112,10 @@ export class MistralService extends AIService {
         }
     }
 
-    handleError$ = (error: MistralServiceError) => {
-        const simpleMessage = error.message?.replace(/(\r\n|\n|\r)/gm, '') || 'An error occurred';
-        return of({
-            name: `${this.errorPrefix} ${simpleMessage}`,
-            value: simpleMessage,
-            isError: true,
-            disabled: true,
-        });
-    };
-
-    private async checkAvailableModels() {
-        const availableModels = await this.getAvailableModels();
-        if (availableModels.includes(this.params.config.model)) {
-            return true;
-        }
-        throw new Error(`Invalid model type of Mistral AI`);
-    }
-
-    private async getAvailableModels() {
-        const response: AxiosResponse<ListAvailableModelsResponse> = await new HttpRequestBuilder({
-            method: 'GET',
-            baseURL: `${this.host}/v1/models`,
-            timeout: this.params.config.timeout,
-        })
-            .setHeaders({
-                Authorization: `Bearer ${this.apiKey}`,
-                'content-type': 'application/json',
-            })
-            .execute();
-
-        return response.data.data.filter(model => model.object === 'model').map(model => model.id);
-    }
-
-    private async createChatCompletions(systemPrompt: string, userMessage: string) {
+    private async createChatCompletions(systemPrompt: string, userMessage: string): Promise<string> {
         const response: AxiosResponse<CreateChatCompletionsResponse> = await new HttpRequestBuilder({
             method: 'POST',
-            baseURL: `${this.host}/v1/chat/completions`,
+            baseURL: `${this.host}/chat/completions`,
             timeout: this.params.config.timeout,
         })
             .setHeaders({
@@ -145,7 +127,7 @@ export class MistralService extends AIService {
                 messages: [
                     {
                         role: 'system',
-                        content: systemPrompt,
+                        content: `${systemPrompt}`,
                     },
                     {
                         role: 'user',
@@ -156,8 +138,6 @@ export class MistralService extends AIService {
                 top_p: 1,
                 max_tokens: this.params.config.maxTokens,
                 stream: false,
-                safe_prompt: false,
-                random_seed: getRandomNumber(10, 1000),
             })
             .execute();
         const result: CreateChatCompletionsResponse = response.data;

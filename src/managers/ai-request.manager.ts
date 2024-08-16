@@ -12,6 +12,7 @@ import { HuggingFaceService } from '../services/ai/hugging-face.service.js';
 import { MistralService } from '../services/ai/mistral.service.js';
 import { OllamaService } from '../services/ai/ollama.service.js';
 import { OpenAIService } from '../services/ai/openai.service.js';
+import { PerplexityService } from '../services/ai/perplexity.service.js';
 import { ModelName, ValidConfig } from '../utils/config.js';
 
 export class AIRequestManager {
@@ -79,6 +80,12 @@ export class AIRequestManager {
                     case 'GROQ':
                         return AIServiceFactory.create(GroqService, {
                             config: this.config.GROQ,
+                            userMessage: this.userMessage,
+                            keyName: ai,
+                        }).generateChoice$();
+                    case 'PERPLEXITY':
+                        return AIServiceFactory.create(PerplexityService, {
+                            config: this.config.PERPLEXITY,
                             userMessage: this.userMessage,
                             keyName: ai,
                         }).generateChoice$();

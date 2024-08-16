@@ -40,6 +40,7 @@ _aipick_ is an interactive CLI tool leveraging multiple AI models for quick and 
 - [Mistral AI](https://mistral.ai/) (including [Codestral](https://mistral.ai/news/codestral/))
 - [Cohere](https://cohere.com/)
 - [Groq](https://groq.com/)
+- [Perplexity](https://docs.perplexity.ai/)
 - [Huggingface **(Unofficial)**](https://huggingface.co/chat/)
 
 ### Local
@@ -60,7 +61,7 @@ npm install -g aipick
 
 ```sh
 aipick config set OPENAI.key=<your key>
-aipick config set OLLAMA.model=<your local model>
+aipick config set ANTHROPIC.key=<your key>
 # ... (similar commands for other providers)
 ```
 
@@ -169,6 +170,12 @@ Please check the documentation for each specific model to confirm which settings
 | `logging`          | Enable logging                       | true     |
 
 
+> 👉 **Tip:** To set the General Settings for each model, use the following command.
+> ```shell
+> aipick config set OPENAI.maxTokens="2048"
+> aipick config set ANTHROPIC.logging=false
+> ```
+
 ##### systemPrompt
 - Allow users to specify a custom system prompt
 
@@ -235,20 +242,14 @@ aipick log removeAll
 
 ### OpenAI
 
-| Setting            | Description                                                                                                      | Default                |
-|--------------------|------------------------------------------------------------------------------------------------------------------|------------------------|
-| `key`              | API key                                                                                                          | -                      |
-| `model`            | Model to use                                                                                                     | `gpt-3.5-turbo`        |
-| `url`              | API endpoint URL                                                                                                 | https://api.openai.com |
-| `path`             | API path                                                                                                         | /v1/chat/completions   |
-| `proxy`            | Proxy settings                                                                                                   | -                      |
-| `generate`         | Number of responses to generate (1-5)                                                                            | 1                      |
-| `systemPrompt`     | System Prompt text(`systemPrompt` takes precedence over `SystemPromptPath` and does not apply at the same time.) | -                      |
-| `systemPromptPath` | Path to system prompt file                                                                                       | -                      |
-| `timeout`          | Request timeout (milliseconds)                                                                                   | 10000                  |
-| `temperature`      | Model's creativity (0.0 - 2.0)                                                                                   | 0.7                    |
-| `maxTokens`        | Maximum number of tokens to generate                                                                             | 1024                   |
-| `logging`          | Enable logging                                                                                                   | true                   |
+| Setting            | Description                               | Default                |
+|--------------------|-------------------------------------------|------------------------|
+| `key`              | API key                                   | -                      |
+| `model`            | Model to use                              | `gpt-3.5-turbo`        |
+| `url`              | API endpoint URL                          | https://api.openai.com |
+| `path`             | API path                                  | /v1/chat/completions   |
+| `proxy`            | Proxy settings                            | -                      |
+| `generate`         | Number of responses to generate (1-5)     | 1                      |
 
 ##### OPENAI.key
 
@@ -282,17 +283,25 @@ Default: `/v1/chat/completions`
 
 The OpenAI Path.
 
+##### OPENAI.generate
+
+Default: `1`
+
+The number of commit messages to generate to pick from.
+
+Note, this will use more tokens as it generates more results.
+
+```sh
+aipick config set OPENAI.generate=2
+```
+
 ### Ollama
 
-| Setting            | Description                                                                                                      | Default                |
-|--------------------|------------------------------------------------------------------------------------------------------------------|------------------------|
-| `model`            | Model(s) to use (comma-separated list)                                                                           | -                      |
-| `host`             | Ollama host URL                                                                                                  | http://localhost:11434 |
-| `systemPrompt`     | System Prompt text(`systemPrompt` takes precedence over `SystemPromptPath` and does not apply at the same time.) | -                      |
-| `systemPromptPath` | Path to system prompt file                                                                                       | -                      |
-| `timeout`          | Request timeout (milliseconds)                                                                                   | 10000                  |
-| `temperature`      | Model's creativity (0.0 - 2.0)                                                                                   | 0.7                    |
-| `logging`          | Enable logging                                                                                                   | true                   |
+| Setting            | Description                            | Default                |
+|--------------------|----------------------------------------|------------------------|
+| `model`            | Model(s) to use (comma-separated list) | -                      |
+| `host`             | Ollama host URL                        | http://localhost:11434 |
+| `timeout`          | Request timeout (milliseconds)         | 100_000                |
 
 ##### OLLAMA.model
 
@@ -327,15 +336,18 @@ Request timeout for the Ollama.
 aipick config set OLLAMA.timeout=<timeout>
 ```
 
+##### Unsupported Options
+
+Ollama does not support the following options in General Settings.
+
+- maxTokens
+
 ### HuggingFace
 
 | Setting            | Description                                                                                                      | Default                                |
 |--------------------|------------------------------------------------------------------------------------------------------------------|----------------------------------------|
 | `cookie`           | Authentication cookie                                                                                            | -                                      |
 | `model`            | Model to use                                                                                                     | `CohereForAI/c4ai-command-r-plus`      |
-| `systemPrompt`     | System Prompt text(`systemPrompt` takes precedence over `SystemPromptPath` and does not apply at the same time.) | -                                      |
-| `systemPromptPath` | Path to system prompt file                                                                                       | -                                      |
-| `logging`          | Enable logging                                                                                                   | true                                   |
 
 ##### HUGGINGFACE.cookie
 
@@ -364,17 +376,20 @@ Supported:
 aipick config set HUGGINGFACE.model="mistralai/Mistral-7B-Instruct-v0.2"
 ```
 
+##### Unsupported Options
+
+Huggingface does not support the following options in General Settings.
+
+- maxTokens
+- timeout
+- temperature
+
 ### Gemini
 
-| Setting            | Description                                                                                                      | Default                 |
-|--------------------|------------------------------------------------------------------------------------------------------------------|-------------------------|
-| `key`              | API key                                                                                                          | -                       |
-| `model`            | Model to use                                                                                                     | `gemini-1.5-pro-latest` |
-| `systemPrompt`     | System Prompt text(`systemPrompt` takes precedence over `SystemPromptPath` and does not apply at the same time.) | -                       |
-| `systemPromptPath` | Path to system prompt file                                                                                       | -                       |
-| `temperature`      | Model's creativity (0.0 - 2.0)                                                                                   | 0.7                     |
-| `maxTokens`        | Maximum number of tokens to generate                                                                             | 1024                    |
-| `logging`          | Enable logging                                                                                                   | true                    |
+| Setting            | Description      | Default                 |
+|--------------------|------------------|-------------------------|
+| `key`              | API key          | -                       |
+| `model`            | Model to use     | `gemini-1.5-pro-latest` |
 
 ##### GEMINI.key
 
@@ -396,17 +411,18 @@ Supported:
 aipick config set GEMINI.model="gemini-1.5-flash-latest"
 ```
 
+##### Unsupported Options
+
+Gemini does not support the following options in General Settings.
+
+- timeout
+ 
 ### Anthropic
 
-| Setting            | Description                                                                                                      | Default                   |
-|--------------------|------------------------------------------------------------------------------------------------------------------|---------------------------|
-| `key`              | API key                                                                                                          | -                         |
-| `model`            | Model to use                                                                                                     | `claude-3-haiku-20240307` |
-| `systemPrompt`     | System Prompt text(`systemPrompt` takes precedence over `SystemPromptPath` and does not apply at the same time.) | -                         |
-| `systemPromptPath` | Path to system prompt file                                                                                       | -                         |
-| `temperature`      | Model's creativity (0.0 - 2.0)                                                                                   | 0.7                       |
-| `maxTokens`        | Maximum number of tokens to generate                                                                             | 1024                      |
-| `logging`          | Enable logging                                                                                                   | true                      |
+| Setting            | Description              | Default                   |
+|--------------------|--------------------------|---------------------------|
+| `key`              | API key                  | -                         |
+| `model`            | Model to use             | `claude-3-haiku-20240307` |
 
 ##### ANTHROPIC.key
 
@@ -420,26 +436,24 @@ Supported:
 - `claude-3-haiku-20240307`
 - `claude-3-sonnet-20240229`
 - `claude-3-opus-20240229`
-- `claude-2.1`
-- `claude-2.0`
-- `claude-instant-1.2`
+- `claude-3-5-sonnet-20240620`
 
 ```sh
-aipick config set ANTHROPIC.model=claude-instant-1.2
+aipick config set ANTHROPIC.model="claude-3-5-sonnet-20240620"
 ```
 
+##### Unsupported Options
+
+Anthropic does not support the following options in General Settings.
+
+- timeout
+ 
 ### Mistral
 
-| Setting            | Description                                                                                                      | Default        |
-|--------------------|------------------------------------------------------------------------------------------------------------------|----------------|
-| `key`              | API key                                                                                                          | -              |
-| `model`            | Model to use                                                                                                     | `mistral-tiny` |
-| `systemPrompt`     | System Prompt text(`systemPrompt` takes precedence over `SystemPromptPath` and does not apply at the same time.) | -              |
-| `systemPromptPath` | Path to system prompt file                                                                                       | -              |
-| `timeout`          | Request timeout (milliseconds)                                                                                   | 10000          |
-| `temperature`      | Model's creativity (0.0 - 2.0)                                                                                   | 0.7            |
-| `maxTokens`        | Maximum number of tokens to generate                                                                             | 1024           |
-| `logging`          | Enable logging                                                                                                   | true           |
+| Setting            | Description       | Default        |
+|--------------------|-------------------|----------------|
+| `key`              | API key           | -              |
+| `model`            | Model to use      | `mistral-tiny` |
 
 ##### MISTRAL.key
 
@@ -467,16 +481,10 @@ Supported:
 
 ### Codestral
 
-| Setting            | Description                                                                                                      | Default            |
-|--------------------|------------------------------------------------------------------------------------------------------------------|--------------------|
-| `key`              | API key                                                                                                          | -                  |
-| `model`            | Model to use                                                                                                     | `codestral-latest` |
-| `systemPrompt`     | System Prompt text(`systemPrompt` takes precedence over `SystemPromptPath` and does not apply at the same time.) | -                  |
-| `systemPromptPath` | Path to system prompt file                                                                                       | -                  |
-| `timeout`          | Request timeout (milliseconds)                                                                                   | 10000              |
-| `temperature`      | Model's creativity (0.0 - 2.0)                                                                                   | 0.7                |
-| `maxTokens`        | Maximum number of tokens to generate                                                                             | 1024               |
-| `logging`          | Enable logging                                                                                                   | true               |
+| Setting            | Description     | Default            |
+|--------------------|-----------------|--------------------|
+| `key`              | API key         | -                  |
+| `model`            | Model to use    | `codestral-latest` |
 
 ##### CODESTRAL.key
 
@@ -496,17 +504,10 @@ aipick config set CODESTRAL.model="codestral-2405"
 
 #### Cohere
 
-| Setting            | Description                                                                                                      | Default           |
-|--------------------|------------------------------------------------------------------------------------------------------------------|-------------------|
-| `key`              | API key                                                                                                          | -                 |
-| `model`            | Model to use                                                                                                     | `command-r-plus`  |
-| `generate`         | Number of responses to generate (1-5)                                                                            | 1                 |
-| `systemPrompt`     | System Prompt text(`systemPrompt` takes precedence over `SystemPromptPath` and does not apply at the same time.) | -                 |
-| `systemPromptPath` | Path to system prompt file                                                                                       | -                 |
-| `temperature`      | Model's creativity (0.0 - 2.0)                                                                                   | 0.7               |
-| `maxTokens`        | Maximum number of tokens to generate                                                                             | 1024              |
-| `logging`          | Enable logging                                                                                                   | true              |
-
+| Setting            | Description             | Default           |
+|--------------------|-------------------------|-------------------|
+| `key`              | API key                 | -                 |
+| `model`            | Model to use            | `command`  |
 
 ##### COHERE.key
 
@@ -517,8 +518,6 @@ The Cohere API key. If you don't have one, please sign up and get the API key in
 Default: `command`
 
 Supported models:
-- `command-r-plus`
-- `command-r`
 - `command`
 - `command-nightly`
 - `command-light`
@@ -528,18 +527,18 @@ Supported models:
 aipick config set COHERE.model="command-r"
 ```
 
+##### Unsupported Options
+
+Cohere does not support the following options in General Settings.
+
+- timeout
+
 ### Groq
 
 | Setting            | Description                                                                                                      | Default       |
 |--------------------|------------------------------------------------------------------------------------------------------------------|---------------|
 | `key`              | API key                                                                                                          | -             |
 | `model`            | Model to use                                                                                                     | `gemma-7b-it` |
-| `systemPrompt`     | System Prompt text(`systemPrompt` takes precedence over `SystemPromptPath` and does not apply at the same time.) | -             |
-| `systemPromptPath` | Path to system prompt file                                                                                       | -             |
-| `timeout`          | Request timeout (milliseconds)                                                                                   | 10000         |
-| `temperature`      | Model's creativity (0.0 - 2.0)                                                                                   | 0.7           |
-| `maxTokens`        | Maximum number of tokens to generate                                                                             | 1024          |
-| `logging`          | Enable logging                                                                                                   | true          |
 
 ##### GROQ.key
 
@@ -547,16 +546,51 @@ The Groq API key. If you don't have one, please sign up and get the API key in [
 
 ##### GROQ.model
 
-Default: `gemma-7b-it`
+Default: `gemma2-9b-it`
 
 Supported:
-- `llama3-8b-8192`
-- `llama3-70b-8192`
-- `mixtral-8x7b-32768`
+- `gemma2-9b-it`
 - `gemma-7b-it`
+- `llama-3.1-70b-versatile`
+- `llama-3.1-8b-instant`
+- `llama3-70b-8192`
+- `llama3-8b-8192`
+- `llama3-groq-70b-8192-tool-use-preview`
+- `llama3-groq-8b-8192-tool-use-preview`
 
 ```sh
 aipick config set GROQ.model="llama3-8b-8192"
+```
+
+### Perplexity
+
+| Setting            | Description      | Default                           |
+|--------------------|------------------|-----------------------------------|
+| `key`              | API key          | -                                 |
+| `model`            | Model to use     | `llama-3.1-sonar-small-128k-chat` |
+
+##### PERPLEXITY.key
+
+The Perplexity API key. If you don't have one, please sign up and get the API key in [Perplexity](https://docs.perplexity.ai/)
+
+##### PERPLEXITY.model
+
+Default: `llama-3.1-sonar-small-128k-chat`
+
+Supported:
+- `llama-3.1-sonar-small-128k-chat`
+- `llama-3.1-sonar-large-128k-chat`
+- `llama-3.1-sonar-large-128k-online`
+- `llama-3.1-sonar-small-128k-online`
+- `llama-3.1-8b-instruct`
+- `llama-3.1-70b-instruct`
+- `llama-3.1-8b`
+- `llama-3.1-70b`
+
+> The models mentioned above are subject to change.
+
+```sh
+aipick config set PERPLEXITY.model="llama-3.1-70b"
 ```
 
 ## Upgrading
